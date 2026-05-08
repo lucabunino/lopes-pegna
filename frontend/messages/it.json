@@ -1,0 +1,46 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"hello_world": "Hello, {name} from it!",
+
+	"shop": "Shop",
+	"about": "About",
+	"beads": "Perle",
+	"contacts": "Contatti",
+	"cart": "Carrello",
+	"about_lopes_pegna": "About Lopes Pegna",
+	"sarah_s_favourites": "I consigli di Sarah",
+
+	"vat": "P. IVA",
+	"all_rights_reserved": "Tutti i diritti riservati",
+	"get_in_touch": "Entra in contatto",
+	"informations": "Informazioni",
+	"sets": "Set",
+	"discover_more": "Scopri di più",
+	"read_more": "Leggi di",
+	"wear_me": "Indossami",
+	"see_all": "Vedi tutti",
+	"add_to_cart": "Aggiungi al carrello",
+	"sold_out": "Esaurito",
+	"loading": "Caricamento",
+
+	"sort": "Ordina",
+	"price_asc": "Prezzo (dal più basso)",
+	"price_desc": "Prezzo (dal più alto)",
+	"new_asc": "Più recente",
+	"new_desc": "Meno recente",
+	"number_asc": "Numero (crescente)",
+	"number_desc": "Numero (decrescente)",
+	"show": "Mostra",
+	"all": "Tutti",
+	"all_products": "Tutti i prodotti",
+	"grid": "Griglia",
+	"list": "Lista",
+
+	"for_info": "Per informazioni",
+	"phone": "Telefono",
+	"customer_service_sales_gifts": "Customer service, vendite, regali",
+	"showroom": "Showroom",
+	"book_an_appointment": "Prenota un abbonamento",
+
+	"close": "chiudi"
+}

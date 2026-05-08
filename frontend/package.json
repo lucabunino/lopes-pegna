@@ -1,0 +1,32 @@
+{
+	"name": "frontend",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''"
+	},
+	"devDependencies": {
+		"@inlang/paraglide-js": "^2.15.2",
+		"@inlang/paraglide-js-adapter-sveltekit": "^0.6.7",
+		"@sveltejs/adapter-vercel": "^6.3.3",
+		"@sveltejs/kit": "^2.57.0",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
+		"autoprefixer": "^10.5.0",
+		"postcss": "^8.5.12",
+		"postcss-nesting": "^14.0.0",
+		"sass-embedded": "^1.99.0",
+		"svelte": "^5.55.2",
+		"vite": "^8.0.7"
+	},
+	"dependencies": {
+		"@portabletext/svelte": "^3.0.1",
+		"@sanity/client": "^7.22.0",
+		"@sanity/image-url": "^2.1.1",
+		"@shopify/shopify-api": "^13.0.0",
+		"swiper": "^12.1.3"
+	}
+}

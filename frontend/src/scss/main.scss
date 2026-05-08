@@ -1,0 +1,165 @@
+/* Setup */
+$colors: (
+	"white":		#FFFDFA,
+	"difference":	#F0E1CE,
+	"black":		#292929,
+	"lightGray":	#F1F1EF,
+	"darkGray":		#ACACAC,
+);
+:root{
+	@each $name, $value in $colors {
+		--#{$name}: #{$value};
+	}
+	
+	@for $i from 1 through 200 {
+        --sp-#{$i}: #{calc($i / 12)}rem;
+    }
+	
+	--headerHeight: calc(var(--sp-24)*2 + 1rem*1.15);
+	--footerHeight: calc(var(--sp-100) + var(--sp-24) + 0.786rem*1.2);
+	--transition: cubic-bezier(.77,0,.175,1) 300ms;
+
+	@media (width <= 1080px) {
+		--headerHeight: calc(var(--sp-40) + var(--sp-20) + 1.142rem*1.15);
+		--footerHeight: calc(var(--sp-40) + var(--sp-20) + 1.142rem*1.15);
+	}
+}
+html {
+	-webkit-font-smoothing: antialiased;
+	font-size: clamp(12px, calc(12px), 15px);
+	line-height: 1.2;
+	overscroll-behavior-x: none;
+
+	@media (width <= 1080px) {
+		font-size: clamp(12px, calc(18px - .5vw), 14px);
+	}
+}
+main {
+	min-height: 100vh;
+}
+pre {
+	font-size: .7rem;
+	background-color: magenta;
+	width: fit-content;
+	position: absolute;
+}
+/* Visibility */
+.hidden {
+	display: none !important;
+}
+.invisible {
+	opacity: 0;
+	pointer-events: none;
+}
+.mobile-s-only {
+	display: none;
+}
+.mobile-only {
+	display: none;
+}
+@media screen and (max-width: 1080px) {
+	.desktop-only {
+		display: none !important;
+	}
+	.mobile-only {
+		display: inherit;
+	}
+}
+@media screen and (max-width: 768px) {
+	.desktop-s-only {
+		display: none !important;
+	}
+	.mobile-s-only {
+		display: inherit;
+	}
+}
+/* Buttons */
+.btn-s {
+	display: inline-block;
+	width: fit-content;
+
+	&::before {
+		content: '';
+		display: block;
+		width: 0;
+		height: 1px;
+		position: relative;
+		top: 1.15em;
+		background-color: currentColor;
+		transition: var(--transition);
+		transition-property: width;
+	}
+	&:hover {
+		&::before {
+			width: 100%;
+		}
+	}
+	&.active,
+	&[aria-current="page"],
+	&[aria-current=true] {
+		&::before {
+			width: 100%;
+		}
+	}
+}
+.btn-m {
+	display: inline-block;
+	width: fit-content;
+	padding: 1em 2em;
+	border: solid 1px var(--black);
+	border-radius: 99em;
+
+	&:hover {
+		background-color: var(--black);
+		color: var(--white);
+	}
+	&.active,
+	&[aria-current="page"],
+	&[aria-current=true] {
+		&::before {
+			width: 100%;
+		}
+	}
+}
+.btn-shop {
+	opacity: 0.5;                
+	&:hover, &.active {
+		opacity: 1;
+	}
+}
+// Colors
+@each $name, $value in $colors {
+	.#{$name}       { color: $value; }
+	.bg-#{$name}    { background-color: $value; }
+	.fill-#{$name}  { fill: $value; }
+	.stroke-#{$name}{ stroke: $value; }
+	.border-#{$name}{ border: solid 1px $value; }
+	
+	.hover-#{$name}:hover { color: $value; }
+	.hover-bg-#{$name}:hover { background-color: $value; }
+	.hover-fill-#{$name}:hover { fill: $value; }
+	.hover-stroke-#{$name}:hover { stroke: $value; }
+	.hover-border-#{$name}:hover { border: solid 1px $value; }
+}
+
+// General
+.cover {
+	object-fit: cover;
+}
+._9_21	{ aspect-ratio: 9/21; }
+._9_16	{ aspect-ratio: 9/16; }
+._2_3	{ aspect-ratio: 2/3; }
+._3_4	{ aspect-ratio: 3/4; }
+._4_5	{ aspect-ratio: 4/5; }
+._1_1	{ aspect-ratio: 1/1; }
+._5_4	{ aspect-ratio: 5/4; }
+._4_3	{ aspect-ratio: 4/3; }
+._3_2	{ aspect-ratio: 3/2; }
+._16_9	{ aspect-ratio: 16/9; }
+._21_9	{ aspect-ratio: 21/9; }
+
+.max-w-800 {max-width: 800px;}
+.max-w-700 {max-width: 700px;}
+.max-w-600 {max-width: 600px;}
+.max-w-500 {max-width: 500px;}
+.max-w-400 {max-width: 400px;}

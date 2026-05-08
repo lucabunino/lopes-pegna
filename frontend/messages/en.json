@@ -1,0 +1,46 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"hello_world": "Hello, {name} from en!",
+
+	"shop": "Shop",
+	"about": "About",
+	"beads": "Beads",
+	"contacts": "Contacts",
+	"cart": "Cart",
+	"about_lopes_pegna": "About Lopes Pegna",
+	"sarah_s_favourites": "Sarah's Favourites",
+
+	"vat": "VAT",
+	"all_rights_reserved": "All rights reserved",
+	"get_in_touch": "Get in touch",
+	"informations": "Informations",
+	"sets": "Sets",
+	"discover_more": "Discover more",
+	"read_more": "Read more",
+	"wear_me": "Wear me",
+	"see_all": "See all",
+	"add_to_cart": "Add to cart",
+	"sold_out": "Sold out",
+	"loading": "Loading",
+
+	"sort": "Sort",
+	"price_asc": "Price (low to high)",
+	"price_desc": "Price (high to low)",
+	"new_asc": "Newest",
+	"new_desc": "Oldest",
+	"number_asc": "Number (ascending)",
+	"number_desc": "Number (descending)",
+	"show": "Show",
+	"all": "All",
+	"all_products": "All products",
+	"grid": "Grid",
+	"list": "List",
+
+	"for_info": "For info",
+	"phone": "Phone",
+	"customer_service_sales_gifts": "Customer service, sales, gifts",
+	"showroom": "Showroom",
+	"book_an_appointment": "Book an appointment",
+
+	"close": "close"
+}
