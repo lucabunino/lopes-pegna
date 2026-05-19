@@ -12,7 +12,8 @@
     import { cartStore } from '$lib/stores/cart.svelte.js';
 
     // functions
-    let menuer = getMenu(); menuer.setDark(true); menuer.setDifference(false); menuer.setSmall(false);
+    let menuer = getMenu(); menuer.setDark(true); menuer.setDifference(true); menuer.setSmall(false);
+	
     const formatPrice = (amount, currencyCode) => {
         return new Intl.NumberFormat(getLocale(), {
             style: 'currency',

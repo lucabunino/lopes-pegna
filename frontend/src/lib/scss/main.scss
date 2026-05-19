@@ -3,7 +3,7 @@
 /* Setup */
 $colors: (
 	"white":		#FFFDFA,
-	"difference":	#F0E1CE,
+	"difference":	#D6D4D1,
 	"black":		#292929,
 	"lightGray":	#F1F1EF,
 	"darkGray":		#ACACAC,
@@ -170,27 +170,59 @@ pre {
 .max-w-500 {max-width: 500px;}
 .max-w-400 {max-width: 400px;}
 
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
 // Specific
 .breadcrumb-mobile {
 	display: none;
 
 	&.dark { color: var(--black); }
 	&.light { color: var(--white); }
-	&.difference:not(.open) { 
+	&.difference:not(.open) {
 		color: var(--difference);
 		mix-blend-mode: difference;
 	}
 
-	@media (width <= #{$lg}) {
-		display: block;
-		position: fixed;
-		top: var(--sp-40);
-		left: var(--sp-12);
-		z-index: 7;
-
-		ol {
-			display: flex;
-			column-gap: var(--sp-3);
-		}
+	ol {
+		display: flex;
+		column-gap: var(--sp-3);
 	}
+@media (width <= #{$lg}) {
+	display: flex;
+	column-gap: var(--sp-3);
+	position: fixed;
+	top: var(--sp-40);
+	left: var(--sp-12);
+	z-index: 11;
+}
+}
+
+.cart-mobile {
+display: none;
+background: none;
+border: none;
+padding: 0;
+cursor: pointer;
+
+&.dark { color: var(--black); }
+&.light { color: var(--white); }
+&.difference:not(.open) {
+	color: var(--difference);
+	mix-blend-mode: difference;
+}
+
+@media (width <= #{$lg}) {
+	display: block;
+	position: fixed;
+	top: var(--sp-40);
+	right: var(--sp-12);
+	z-index: 11;
+}
 }

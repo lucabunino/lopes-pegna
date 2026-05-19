@@ -20,6 +20,8 @@
     <a href={value?.href} target={value?.blank ? '_blank' : undefined}>
         {@render children()}
     </a>
+{:else if style === 'h2'}
+    <h2>{@render children()}</h2>
 {:else if style === 'h3'}
     <h3>{@render children()}</h3>
 {:else if style === 'h4'}
@@ -42,7 +44,11 @@
 		display: inline;
 		text-decoration: underline;
 	}
-	
+	h2 {
+		margin-top: 3em;
+		margin-bottom: .5em;
+		text-transform: uppercase;
+	}
 	h3 {
 		margin-top: 3em;
 		margin-bottom: .5em;

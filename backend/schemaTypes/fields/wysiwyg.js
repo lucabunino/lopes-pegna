@@ -5,7 +5,10 @@ export default function wysiwyg(fieldName, groupName) {
 		of: [
 			{
 				type: 'block',
-				lists: [],
+				lists: [
+                    { title: 'Bullet', value: 'bullet' },
+                    { title: 'Numbered', value: 'number' }
+                ],
 				styles: [
 					{ value: 'normal', title: 'Normal' },
 					{ value: 'h2', title: 'H2' },

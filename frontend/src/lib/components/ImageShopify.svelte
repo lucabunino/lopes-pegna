@@ -60,7 +60,7 @@
 
 		&.sliderMarqueeShopify {
 			img {
-				width: 60vw;
+				width: 70vw;
 			}
 		}
     }

@@ -3,27 +3,18 @@
     // imports
     import { onMount } from 'svelte';
     import { dev } from '$app/environment';
-    import { register } from 'swiper/element/bundle';
-    import { innerWidth } from 'svelte/reactivity/window';
+    import { register } from 'swiper/element/bundle'; 
+    import { innerHeight, innerWidth } from 'svelte/reactivity/window';
     import Media from './Media.svelte';
     import { urlFor } from '$lib/utils/image.js';
+	import bp from '$lib/scss/breakpoints.module.scss';
 
     // stores
 
     // functions
-    register();
     let swiperEl = $state();
     let { slides, className = undefined } = $props();
     let offset = $derived(className == 'contacts' ? (innerWidth.current - 48) / 12 * 6 + 24 + 3 : (innerWidth.current - 48) / 12 * 5 + 24 + 3);
-
-    $effect(() => {
-        if (swiperEl?.swiper) {
-            swiperEl.swiper.params.slidesOffsetBefore = innerWidth.current > 678 ? offset : 12;
-            swiperEl.swiper.params.slidesOffsetAfter = innerWidth.current;
-            swiperEl.swiper.update();
-            swiperEl.swiper.slideTo(swiperEl.swiper.activeIndex, 300);
-        }
-    });
 
     onMount(() => {
         const swiperParams = {
@@ -72,16 +63,25 @@
         Object.assign(swiperEl, swiperParams);
         swiperEl.initialize();
     });
+
+	$effect(() => {
+		if (swiperEl?.swiper) {
+            swiperEl.swiper.params.slidesOffsetBefore = innerWidth.current > parseInt(bp.sm) ? offset : 12;
+            swiperEl.swiper.params.slidesOffsetAfter = innerWidth.current;
+            swiperEl.swiper.update();
+            swiperEl.swiper.slideTo(swiperEl.swiper.activeIndex, 300);
+        }
+	})
 </script>
 
-<swiper-container class="{className}" bind:this={swiperEl} init="false">
+<swiper-container class={className} bind:this={swiperEl} init="false">
 	{#each slides as slide, i}
 		<swiper-slide>
 			<Media media={slide} cover={false} className={'sliderHalf'}/>
 		</swiper-slide>
 	{/each}
 </swiper-container>
-<div class="swiper-pagination in-13 uppercase" style:margin-left="{innerWidth.current > 678 ? offset : 12}px"></div>
+<div class="swiper-pagination in-13 uppercase" style:margin-left="{innerWidth.current > parseInt(bp.sm) ? offset : 12}px"></div>
 
 
 

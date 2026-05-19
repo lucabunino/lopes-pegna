@@ -14,7 +14,7 @@
     let cartInfo = $derived(page.data.cartInfo);
 </script>
 
-<div class="cart-content">
+<div class="cart-content hide-scrollbar">
 	{#if cartStore.current && cartStore.current.lines.nodes.length > 0}
 		<ul class="cart-items">
 			{#each cartStore.current.lines.nodes as line (line.id)}

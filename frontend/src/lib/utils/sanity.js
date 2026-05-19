@@ -200,6 +200,7 @@ export async function getShop(lang) {
                 kind,
                 "title": title[language == $lang][0].value,
                 slug,
+                "content": content[language == $lang][0].value
             }
         }`,
         { lang }

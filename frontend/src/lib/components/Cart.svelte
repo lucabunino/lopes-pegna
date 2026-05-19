@@ -28,6 +28,8 @@
 {/if}
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
+
     .cart-overlay {
         position: fixed;
         inset: 0;
@@ -54,7 +56,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--sp-40);
+            margin-bottom: var(--sp-32);
         }
+
+		@media (width <= #{$lg}) {
+			padding: var(--sp-40) var(--sp-12) var(--sp-24);
+		}
     }
 </style>

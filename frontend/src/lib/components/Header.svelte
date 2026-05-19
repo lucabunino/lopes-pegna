@@ -89,6 +89,14 @@
 			</li>
 		</ul>
     </nav>
+	{#if cartStore.current?.totalQuantity > 0}
+		<button 
+			class="cart-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}"
+			onclick={() => cartStore.toggle()}
+		>
+			{m.cart()} {cartStore.current?.totalQuantity ? `[ ${cartStore.current.totalQuantity} ]` : ''}
+		</button>
+	{/if}
 </header>
 
 <style lang="scss">
@@ -109,8 +117,26 @@ header nav {
 		display: contents;
 	}
 	
-	&.dark { color: var(--black); }
-	&.light { color: var(--white); }
+	&.dark {
+		@media (width > #{$lg}) {
+            color: var(--black);
+        }
+		@media (width <= #{$lg}) {
+			.logo-mobile {
+				color: var(--black);
+			}
+        }
+	}
+	&.light {
+		@media (width > #{$lg}) {
+            color: var(--white);
+        }
+		@media (width <= #{$lg}) {
+			.logo-mobile {
+				color: var(--white);
+			}
+        }
+	}
 	&.difference:not(.open) { 
 		@media (width > #{$lg}) {
             color: var(--difference);
@@ -140,6 +166,11 @@ header nav {
 		align-items: center;
 		border-color: var(--white);
 		box-shadow: 0px 5px 10px 1px rgba($color: #000000, $alpha: .1);
+
+		&:hover {
+			background: var(--lightGray);
+			border-color: var(--lightGray);
+		}
 
 		.hamburger {
 			display: block;

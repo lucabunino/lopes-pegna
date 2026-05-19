@@ -22,7 +22,7 @@
                 <a href={`/shop/${line.merchandise.product.handle}`}>{line.merchandise.product.title}</a>
             </h4>
             {#if line.merchandise.product.collections?.nodes?.length > 0}
-                <span class="collection">{line.merchandise.product.collections.nodes[0].singular.value}</span>
+                <span class="collection">{line.merchandise.product.collections.nodes[0].singular?.value || line.merchandise.product.collections.nodes[0].title}</span>
             {/if}
         </div>
         <div class="item-actions">

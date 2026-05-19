@@ -49,6 +49,11 @@ export const cartStore = {
     get current() { return cart; },
     get isOpen() { return isOpen; },
     set isOpen(val) { isOpen = val; },
+    get totalQuantity() { return cart?.totalQuantity || 0; },
+
+    toggle() {
+        isOpen = !isOpen;
+    },
 
     async init() {
         if (typeof window === 'undefined') return;

@@ -1,5 +1,5 @@
 import { shopifyFetch, GET_PRODUCT_BY_HANDLE, GET_RELATED_PRODUCTS } from '$lib/utils/shopify';
-import { getInfoEmail } from '$lib/utils/sanity';
+import { getInfoEmail, getShop } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
 import { error } from '@sveltejs/kit';
 
@@ -9,7 +9,7 @@ export async function load({ params, getClientAddress }) {
     const buyerIP = getClientAddress();
 
     try {
-        const [productData, relatedData] = await Promise.all([
+        const [productData, relatedData, shop] = await Promise.all([
             shopifyFetch({
                 query: GET_PRODUCT_BY_HANDLE,
                 variables: { handle },
@@ -21,7 +21,8 @@ export async function load({ params, getClientAddress }) {
                 variables: { handle },
                 lang,
                 buyerIP,
-            })
+            }),
+            getShop(lang)
         ]);
         
         const infoEmail = await getInfoEmail();
@@ -63,6 +64,7 @@ export async function load({ params, getClientAddress }) {
             product: productData.product,
             related,
 			infoEmail: infoEmail.infoEmail,
+            shopPolicies: shop?.shopPolicies || []
         };
     } catch (err) {
         throw error(500, 'Failed to load product data');

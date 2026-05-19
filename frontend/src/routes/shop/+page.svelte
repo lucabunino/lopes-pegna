@@ -110,6 +110,8 @@
         return () => observer.disconnect();
     });
 
+    import { cartStore } from '$lib/stores/cart.svelte.js';
+
     function updateParams(newParams) {
         const params = new URLSearchParams(page.url.searchParams);
         for (const [key, value] of Object.entries(newParams)) {

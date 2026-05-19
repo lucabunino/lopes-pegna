@@ -295,13 +295,18 @@ export const GET_RELATED_PRODUCTS = `
                   singular: metafield(namespace: "custom", key: "singular_name") { value }
                 }
               }
+              variants(first: 1) {
+                nodes {
+                  id
+                }
+              }
               priceRange {
                 minVariantPrice {
                   amount
                   currencyCode
                 }
               }
-              images(first: 1) {
+              images(first: 2) {
                 nodes {
                   url
                   lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
@@ -334,7 +339,12 @@ export const GET_RELATED_PRODUCTS = `
 				singular: metafield(namespace: "custom", key: "singular_name") { value }
 			}
 		}
-        images(first: 1) {
+        variants(first: 1) {
+          nodes {
+            id
+          }
+        }
+        images(first: 2) {
           nodes {
             url
             lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })

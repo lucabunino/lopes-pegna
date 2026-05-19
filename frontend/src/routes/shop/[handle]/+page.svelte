@@ -8,6 +8,8 @@
     import { renderRichText } from '$lib/utils/shopify.js';
     import bp from '$lib/scss/breakpoints.module.scss';
     import { innerWidth } from 'svelte/reactivity/window';
+	import { PortableText } from '@portabletext/svelte';
+    import PortableTextStylePolicy from '$lib/components/portableTextStyles/PortableTextStylePolicy.svelte';
 
     // stores
     import { cartStore } from '$lib/stores/cart.svelte.js';
@@ -18,7 +20,7 @@
     // functions
     let menuer = getMenu(); menuer.setDark(true); menuer.setDifference(true); menuer.setSmall(true);
     let { data } = $props();
-    const { product } = data;
+    const { product } = $derived(data);
     const keysObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_keys"));
     const valuesObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_values"));
     const keysList = $derived(keysObj ? JSON.parse(keysObj.value) : []);
@@ -101,19 +103,48 @@
 					</div>
 				</div>
 			{/if}
-
 			{#if product.variants.nodes.length > 0 && product.availableForSale}
-			<div class="btns">
-				<button 
-					class="btn-m in-15 uppercase" 
-					onclick={() => cartStore.addItem(product.variants.nodes[0].id)}
-				>
-					{m.add_to_cart()}
-				</button>
-				{#if data.infoEmail}
-					<a class="btn-s in-15 uppercase" href="mailto:{data.infoEmail}?subject={product.title} – {m.info_request()}">{m.ask_informations()}</a>
-				{/if}
-			</div>
+				<div class="btns">
+					<button 
+						class="cart btn-m in-15 uppercase" 
+						onclick={() => cartStore.addItem(product.variants.nodes[0].id)}
+					>
+						{m.add_to_cart()}
+					</button>
+					{#if data.infoEmail}
+						<a class="info btn-s in-15 uppercase" href="mailto:{data.infoEmail}?subject={product.title} – {m.info_request()}">{m.ask_informations()}</a>
+					{/if}
+				</div>
+			{/if}
+			{#if data.shopPolicies?.length > 0}
+				<div class="policies in-14">
+					{#each data.shopPolicies as policy}
+						<details class="accordion">
+							<summary class="summary">{policy.title} <span class="icon">↓</span></summary>
+							{#if policy.content}
+								<div class="content portableText policy in-14">
+									<PortableText 
+										value={policy.content} 
+										components={{
+											block: {
+												h2: PortableTextStylePolicy,
+												h3: PortableTextStylePolicy,
+												h4: PortableTextStylePolicy,
+												h5: PortableTextStylePolicy,
+												h6: PortableTextStylePolicy,
+												normal: PortableTextStylePolicy,
+											},
+											listItem: PortableTextStylePolicy,
+											marks: {
+												link: PortableTextStylePolicy,
+											},
+										}}
+									/>
+								</div>
+							{/if}
+						</details>
+					{/each}
+				</div>
 			{/if}
 		</div>
 	</section>
@@ -194,6 +225,42 @@
 					}
 				}
 
+				.policies {
+					margin-top: var(--sp-60);
+					.accordion {
+						border-top: 1px solid var(--black);
+						
+						&:last-child {
+							border-bottom: 1px solid var(--black);
+						}
+
+						summary {
+							padding: var(--sp-12) 0;
+							list-style: none;
+							cursor: pointer;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+
+							&::-webkit-details-marker {
+								display: none;
+							}
+
+							.icon {
+								transition: transform 0.3s ease;
+							}
+						}
+
+						&[open] summary .icon {
+							transform: rotate(180deg);
+						}
+
+						.content {
+							padding-bottom: var(--sp-24);
+						}
+					}
+				}
+
 				.btns {
 					display: flex;
 					flex-wrap: wrap;
@@ -220,11 +287,13 @@
 					padding: var(--sp-24) var(--sp-12);
 					position: relative;
 					top: unset;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
 
 					.breadcrumb {
 						display: none;
 					}
-
 					.title {
 						text-align: center;
 					}
@@ -233,6 +302,63 @@
 					}
 					.description {
 						margin-top: var(--sp-39);
+					}
+					.measurements {
+						width: stretch;
+					}
+					.policies {
+						width: stretch;
+						margin-top: var(--sp-40);
+					}
+					.btns {
+						display: contents;
+
+						.cart {
+							position: fixed;
+							bottom: calc(var(--sp-30) + 1.083rem*3.2 + 2px + var(--sp-3));
+							left: 0;
+							z-index: 8;
+							background: var(--black);
+							color: var(--white);
+							width: stretch;
+							max-width: unset;
+							margin: 0 var(--sp-12);
+							text-align: center;
+
+							&:hover {
+								background: var(--lightGray);
+								border-color: var(--lightGray);
+								color: var(--black);
+							}
+						}
+
+						.info {
+							margin-top: var(--sp-40);
+							width: stretch;
+							text-align: center;
+							border: solid 1px var(--black);
+							padding: 1em 2em;
+							margin-top: var();
+						}
+					}
+				}
+			}
+
+			@media (width <= #{$xs}) {
+				.metafields {
+					.metafields-title {
+						margin-bottom: var(--sp-14);
+					}
+					.metafield {
+						flex-direction: column;
+
+						&+.metafield {
+							margin-top: var(--sp-6);
+						}
+						
+						.key {
+							min-width: unset;
+						}
 					}
 				}
 			}
