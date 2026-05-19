@@ -338,7 +338,6 @@
 							text-align: center;
 							border: solid 1px var(--black);
 							padding: 1em 2em;
-							margin-top: var();
 						}
 					}
 				}
