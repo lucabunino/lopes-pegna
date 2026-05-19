@@ -35,12 +35,28 @@
 	"all_products": "All products",
 	"grid": "Grid",
 	"list": "List",
-
+	"subtotal": "Subtotal",
+	"checkout": "Checkout",
+	"empty_cart": "Your cart is empty",
+	"remove": "Remove",
+	"tax_and_duties": "Tasse e spese doganali",
+	"included": "Incluse",
+	"excluded": "Excluded",
+	"shipping": "Shipping",
+	"calculated_at_checkout": "Calculated at checkout",
 	"for_info": "For info",
 	"phone": "Phone",
 	"customer_service_sales_gifts": "Customer service, sales, gifts",
 	"showroom": "Showroom",
 	"book_an_appointment": "Book an appointment",
+	"you_may_like": "You may like",
+	"see_all": "See all",
+	"ask_informations": "Ask informations",
+	"info_request": "Info request",
+	"measurements": "Measurements",
+	"length": "Length",
+	"total_length": "Total length",
+	"details": "Details",
 
-	"close": "close"
+	"close": "Close"
 }

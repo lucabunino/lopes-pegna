@@ -1,16 +1,15 @@
 <script>
-	import Media from '$lib/components/Media.svelte';
-	import { PortableText } from '@portabletext/svelte';
-	import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
+    // imports
+    import Media from '$lib/components/Media.svelte';
+    import { PortableText } from '@portabletext/svelte';
+    import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
 
-	let { data } = $props()
+    // stores
+    import { getMenu } from '$lib/stores/menu.svelte.js';
 
-	// Header setup
-	import { getMenu } from '$lib/stores/menu.svelte.js';
-    let menuer = getMenu(); 
-    menuer.setDark(false); 
-    menuer.setDifference(true); 
-    menuer.setSmall(false);
+    // functions
+    let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(true); menuer.setSmall(false);
+    let { data } = $props();
 </script>
 
 <main>
@@ -43,6 +42,7 @@
 </main>
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
 	#hero {
 		height: 70vh;
 		min-height: 500px;

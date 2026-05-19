@@ -1,15 +1,19 @@
 
 <script>
-    import { urlFor } from '$lib/utils/image.js';
+    // imports
     import { onMount } from 'svelte';
-	import { register } from 'swiper/element/bundle'; register()
-    import Media from './Media.svelte';
     import { dev } from '$app/environment';
-	let swiperEl = $state()
+    import { register } from 'swiper/element/bundle';
+    import Media from './Media.svelte';
+    import { urlFor } from '$lib/utils/image.js';
 
+    // stores
+
+    // functions
+    register();
+    let swiperEl = $state();
     let { slides } = $props();
-
-	onMount(() => {
+    onMount(() => {
         const swiperParams = {
             slidesPerView: "auto",
             spaceBetween: 3,

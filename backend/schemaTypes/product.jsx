@@ -1,4 +1,5 @@
 import { useFormValue } from 'sanity'
+import ShopifyIcon from "./icons/shopify";
 
 export default {
   name: 'product',
@@ -27,25 +28,20 @@ export default {
           }
 
           return (
-            <div style={{ marginBottom: '20px' }}>
-              <a 
-                href={`https://admin.shopify.com/store/lopes-pegna/products/${productId}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '10px 15px',
-                  backgroundColor: '#f4f4f4',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  color: '#333',
-                  fontWeight: 'bold',
-                  fontSize: '13px'
-                }}
-              >
-                View in Shopify Admin ↗
-              </a>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+			  	<a 
+					href={`https://admin.shopify.com/store/lopes-pegna/products/${productId}`}
+					target="_blank" 
+					rel="noopener noreferrer"
+					style={{
+					display: 'flex', alignItems: 'center', gap: '8px',
+					padding: '8px 12px', backgroundColor: '#f4f4f4', border: '1px solid #ccc',
+					borderRadius: '4px', textDecoration: 'none', color: '#333', fontSize: '13px'
+					}}
+				>
+					<ShopifyIcon />
+					View in Shopify Admin ↗
+				</a>
             </div>
           )
         }

@@ -35,12 +35,28 @@
 	"all_products": "Tutti i prodotti",
 	"grid": "Griglia",
 	"list": "Lista",
-
+	"subtotal": "Subtotale",
+	"checkout": "Checkout",
+	"empty_cart": "Il carrello è vuoto",
+	"remove": "Rimuovi",
+	"tax_and_duties": "Tasse e spese doganali",
+	"included": "Incluse",
+	"excluded": "Escluse",
+	"shipping": "Spedizione",
+	"calculated_at_checkout": "Calcolata al checkout",
 	"for_info": "Per informazioni",
 	"phone": "Telefono",
 	"customer_service_sales_gifts": "Customer service, vendite, regali",
 	"showroom": "Showroom",
 	"book_an_appointment": "Prenota un abbonamento",
+	"you_may_like": "Ti potrebbe interessare",
+	"see_all": "Vedi tutto",
+	"ask_informations": "Richiedi informazioni",
+	"info_request": "Richiesta informazioni",
+	"measurements": "Misure",
+	"length": "Lunghezza",
+	"total_length": "Lunghezza totale",
+	"details": "Dettagli",
 
-	"close": "chiudi"
+	"close": "Chiudi"
 }

@@ -1,3 +1,5 @@
+@use '$lib/scss/breakpoints.module' as *;
+
 /* Setup */
 $colors: (
 	"white":		#FFFDFA,
@@ -19,7 +21,7 @@ $colors: (
 	--footerHeight: calc(var(--sp-100) + var(--sp-24) + 0.786rem*1.2);
 	--transition: cubic-bezier(.77,0,.175,1) 300ms;
 
-	@media (width <= 1080px) {
+	@media (width <= #{$lg}) {
 		--headerHeight: calc(var(--sp-40) + var(--sp-20) + 1.142rem*1.15);
 		--footerHeight: calc(var(--sp-40) + var(--sp-20) + 1.142rem*1.15);
 	}
@@ -30,8 +32,9 @@ html {
 	line-height: 1.2;
 	overscroll-behavior-x: none;
 
-	@media (width <= 1080px) {
-		font-size: clamp(12px, calc(18px - .5vw), 14px);
+	@media (width <= #{$lg}) {
+		font-size: calc(8px + 1vw);
+		font-size: 12px;
 	}
 }
 main {
@@ -57,19 +60,11 @@ pre {
 .mobile-only {
 	display: none;
 }
-@media screen and (max-width: 1080px) {
+@media (width <= #{$lg}) {
 	.desktop-only {
 		display: none !important;
 	}
 	.mobile-only {
-		display: inherit;
-	}
-}
-@media screen and (max-width: 768px) {
-	.desktop-s-only {
-		display: none !important;
-	}
-	.mobile-s-only {
 		display: inherit;
 	}
 }
@@ -120,6 +115,17 @@ pre {
 			width: 100%;
 		}
 	}
+
+	&.checkout {
+		text-align: center;
+		background: var(--black);
+		color: var(--white);
+
+		&:hover {
+			color: var(--black);
+			background: var(--white);
+		}
+	}
 }
 .btn-shop {
 	opacity: 0.5;                
@@ -163,3 +169,28 @@ pre {
 .max-w-600 {max-width: 600px;}
 .max-w-500 {max-width: 500px;}
 .max-w-400 {max-width: 400px;}
+
+// Specific
+.breadcrumb-mobile {
+	display: none;
+
+	&.dark { color: var(--black); }
+	&.light { color: var(--white); }
+	&.difference:not(.open) { 
+		color: var(--difference);
+		mix-blend-mode: difference;
+	}
+
+	@media (width <= #{$lg}) {
+		display: block;
+		position: fixed;
+		top: var(--sp-40);
+		left: var(--sp-12);
+		z-index: 7;
+
+		ol {
+			display: flex;
+			column-gap: var(--sp-3);
+		}
+	}
+}

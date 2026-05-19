@@ -1,15 +1,17 @@
 <script>
-	import { m } from '$lib/paraglide/messages.js';
-	import Media from '$lib/components/Media.svelte';
-	import Image from '$lib/components/Image.svelte';
-	import SliderHalf from '$lib/components/SliderHalf.svelte';
-	import { PortableText } from '@portabletext/svelte';
-	import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
+    // imports
+    import Media from '$lib/components/Media.svelte';
+    import Image from '$lib/components/Image.svelte';
+    import SliderHalf from '$lib/components/SliderHalf.svelte';
+    import { PortableText } from '@portabletext/svelte';
+    import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
+    import { m } from '$lib/paraglide/messages.js';
 
-	let { data } = $props()
+    // stores
+    import { getMenu } from '$lib/stores/menu.svelte.js';
 
-	// Header first setup
-	import { getMenu } from '$lib/stores/menu.svelte.js';
+    // functions
+    let { data } = $props();
     let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(false); menuer.setSmall(false);
 </script>
 
@@ -84,6 +86,7 @@
 </main>
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
 	#hero {
 		height: 70vh;
 		min-height: 500px;

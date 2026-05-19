@@ -1,13 +1,15 @@
 <script>
+    // imports
     import { page } from "$app/state";
     import { PortableText } from "@portabletext/svelte";
-	import PortableTextStylePlain from "./portableTextStyles/PortableTextStylePlain.svelte";
-	
-	import { getLocale, locales, localizeHref, setLocale } from '$lib/paraglide/runtime';
-    import { resolve } from "$app/paths";
+    import PortableTextStylePlain from "./portableTextStyles/PortableTextStylePlain.svelte";
     import { m } from "$lib/paraglide/messages";
-    
-	let { policies, contacts, info} = $props()
+    import { getLocale, locales, localizeHref } from '$lib/paraglide/runtime';
+
+    // stores
+
+    // functions
+    let { policies, contacts, info } = $props();
 </script>
 
 <footer>
@@ -54,9 +56,6 @@
 		<div class="footer-col lang-switch in-12 uppercase">
 			<nav>
 				<ul>
-					<!-- {#each locales as locale (locale)}
-						<li><a class="footer-item" href={resolve(localizeHref(page.url.pathname, { locale }))} data-sveltekit-reload>{locale}</a></li>
-					{/each} -->
 					{#each locales as locale (locale)}
 						<button class="btn-s" aria-current={getLocale() == locale} onclick={() => {
                             const newPath = localizeHref(page.url.pathname, { locale });
@@ -92,7 +91,9 @@
 	</div>
 </footer>
 
-<style>
+<style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
+
 	footer {
 		padding: var(--sp-24);
 		display: flex;
@@ -130,6 +131,38 @@
 
 		:global(a):hover {
 			opacity: .5;
+		}
+
+		@media (width <= #{$lg}) {
+			padding: var(--sp-24) var(--sp-12) var(--sp-120);
+			gap: var(--sp-24);
+
+			.footer {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				column-gap: var(--sp-12);
+				row-gap: var(--sp-60);
+
+				h4 {
+					padding-bottom: var(--sp-6);
+					border-bottom: solid 1px var(--black);
+					margin-bottom: var(--sp-16);
+				}
+
+				.lang-switch {
+					margin-left: unset;
+				}
+			}
+
+			.credits {
+				flex-direction: column;
+				align-items: flex-start;
+				row-gap: var(--sp-12);
+
+				.portableText {
+					text-align: left;
+				}
+			}
 		}
 	}
 </style>

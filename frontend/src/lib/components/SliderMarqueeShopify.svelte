@@ -1,7 +1,7 @@
 <script>
     // imports
     import { onMount } from 'svelte';
-    import Media from './Media.svelte';
+    import ImageShopify from './ImageShopify.svelte';
 
     // stores
 
@@ -114,7 +114,8 @@
     >
         {#each [...slides, ...slides] as slide}
             <div class="marquee-item" ondragstart={(e) => e.preventDefault()}>
-                <Media media={slide} cover={false} className={'sliderMarquee'} loading={'eager'}/>
+                <!-- <Media media={slide} cover={false} className={'sliderMarquee'} loading={'eager'}/> -->
+				<ImageShopify image={slide} className="sliderMarqueeShopify"/>
             </div>
         {/each}
     </div>

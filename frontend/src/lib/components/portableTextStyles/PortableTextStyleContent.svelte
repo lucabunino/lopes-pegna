@@ -1,8 +1,12 @@
 <script>
+    // imports
     import { fade } from 'svelte/transition';
     import Media from '../Media.svelte';
     import Image from '../Image.svelte';
-    
+
+    // stores
+
+    // functions
     let { 
         portableText,
         children 

@@ -59,7 +59,7 @@ export const GET_PRODUCTS_BY_IDS = `
             id
           }
         }
-		collections(first: 5) {
+		collections(first: 1) {
           nodes {
             handle
             title
@@ -73,7 +73,13 @@ export const GET_PRODUCTS_BY_IDS = `
           }
         }
         images(first: 2) {
-          nodes { url altText width height }
+          nodes { 
+            url 
+            lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
+            altText 
+            width 
+            height 
+          }
         }
         metafield(namespace: "custom", key: "details") { value }
       }
@@ -94,7 +100,7 @@ export const GET_ALL_PRODUCTS = `
         handle
         createdAt
         availableForSale
-        collections(first: 5) {
+        collections(first: 1) {
           nodes {
             handle
             title
@@ -106,6 +112,7 @@ export const GET_ALL_PRODUCTS = `
             ... on MediaImage {
               image {
                 url
+                lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
                 altText
                 width
                 height
@@ -125,7 +132,13 @@ export const GET_ALL_PRODUCTS = `
           }
         }
         images(first: 2) {
-          nodes { url altText width height }
+          nodes { 
+            url 
+            lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
+            altText 
+            width 
+            height 
+          }
         }
       }
     }
@@ -160,6 +173,7 @@ export const GET_PRODUCT_BY_HANDLE = `
         nodes {
           id
           url
+          lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
           altText
           width
           height
@@ -180,22 +194,27 @@ export const GET_PRODUCT_BY_HANDLE = `
           }
           image {
             url
+            lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
             altText
+            width
+            height
           }
         }
       }
-		collections(first: 5) {
+		collections(first: 1) {
           nodes {
             handle
             title
             singular: metafield(namespace: "custom", key: "singular_name") { value }
           }
         }
-      metafields(identifiers: [{namespace: "custom", key: "details"}]) {
-        key
-        value
-        namespace
-      }
+		details: metafield(namespace: "custom", key: "details") {key, value, namespace }
+		length: metafield(namespace: "custom", key: "length") {key, value, namespace }
+		total_length: metafield(namespace: "custom", key: "total_length") {key, value, namespace }
+      custom_keys_values: metafields(identifiers: [
+        {namespace: "custom", key: "custom_keys"},
+        {namespace: "custom", key: "custom_values"}
+      ]) {key, value, namespace }
     }
   }
 `;
@@ -213,7 +232,7 @@ export const FETCH_PRODUCTS_PAGE = `
         handle
         createdAt
         availableForSale
-        collections(first: 5) {
+        collections(first: 1) {
           nodes {
             handle
             title
@@ -225,6 +244,7 @@ export const FETCH_PRODUCTS_PAGE = `
             ... on MediaImage {
               image {
                 url
+                lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
                 altText
                 width
                 height
@@ -244,7 +264,84 @@ export const FETCH_PRODUCTS_PAGE = `
           }
         }
         images(first: 2) {
-          nodes { url altText width height }
+          nodes { 
+            url 
+            lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
+            altText 
+            width 
+            height 
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_RELATED_PRODUCTS = `
+  query getRelatedProducts($handle: String!, $language: LanguageCode) @inContext(language: $language) {
+    product(handle: $handle) {
+      collections(first: 5) {
+        nodes {
+          products(first: 10) {
+            nodes {
+              id
+              title
+              handle
+              availableForSale
+              collections(first: 1) {
+                nodes {
+                  handle
+                  title
+                  singular: metafield(namespace: "custom", key: "singular_name") { value }
+                }
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              images(first: 1) {
+                nodes {
+                  url
+                  lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
+                  altText
+                  width
+                  height
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    products(first: 10, sortKey: BEST_SELLING) {
+      nodes {
+        id
+        title
+        handle
+        availableForSale
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+		collections(first: 1) {
+			nodes {
+				handle
+				title
+				singular: metafield(namespace: "custom", key: "singular_name") { value }
+			}
+		}
+        images(first: 1) {
+          nodes {
+            url
+            lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
+            altText
+            width
+            height
+          }
         }
       }
     }
@@ -272,9 +369,17 @@ export const CART_QUERY = `
               product {
                 title
                 handle
+				collections(first: 1) {
+					nodes {
+						handle
+						title
+						singular: metafield(namespace: "custom", key: "singular_name") { value }
+					}
+				}
               }
               image {
                 url
+                lqip: url(transform: { maxWidth: 20, maxHeight: 20, preferredContentType: JPG })
                 altText
                 width
                 height
@@ -338,3 +443,36 @@ export const CART_LINES_REMOVE_MUTATION = `
     }
   }
 `;
+
+export function renderRichText(metafield) {
+    if (!metafield?.value) return '';
+
+    try {
+        const root = JSON.parse(metafield.value);
+
+        const walk = (node) => {
+            if (node.type === 'text') {
+                let text = node.value;
+                if (node.bold) text = `<strong>${text}</strong>`;
+                if (node.italic) text = `<em>${text}</em>`;
+                return text;
+            }
+
+            const children = node.children ? node.children.map(walk).join('') : '';
+
+            switch (node.type) {
+                case 'root': return children;
+                case 'paragraph': return `<p>${children}</p>`;
+                case 'list': return node.listType === 'ordered' ? `<ol>${children}</ol>` : `<ul>${children}</ul>`;
+                case 'list-item': return `<li>${children}</li>`;
+                case 'heading': return `<h${node.level}>${children}</h${node.level}>`;
+                case 'link': return `<a href="${node.url}" target="_blank">${children}</a>`;
+                default: return children;
+            }
+        };
+
+        return walk(root);
+    } catch (e) {
+        return metafield.value;
+    }
+}

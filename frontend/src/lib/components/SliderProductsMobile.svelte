@@ -17,17 +17,23 @@
 
     onMount(() => {
         const swiperParams = {
-			loop: true,
-			slidesPerView: 2.5,
-            spaceBetween: 6,
+			loop: false,
+			slidesPerView: 1.4,
+            spaceBetween: 3,
 			direction: "horizontal",
+			slidesOffsetBefore: 12,
+			slidesOffsetAfter: 12,
             mousewheel: {
 				forceToAxis: true,
 				sensitivity: 1,
 				thresholdDelta: 10, 
 			},
+			breakpoints: {
+				500: { slidesPerView: 1.7 },
+				768: { slidesPerView: 2.7 },
+			},
 			on: {
-				init(s) { if (dev) console.log('SwiperFixedHeight initialized'); },
+				init(s) { if (dev) console.log('SwiperProductsMobile initialized'); },
 			},
         };
         Object.assign(swiperEl, swiperParams);
@@ -45,7 +51,7 @@
 
 <style lang="scss">
 	swiper-container {
-		width: auto;
+		width: 100vw;
 		display: flex;
 		
 		swiper-slide {

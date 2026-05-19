@@ -1,19 +1,30 @@
 
 <script>
+    // imports
+    import ImageShopify from "./ImageShopify.svelte";
     import { m } from "$lib/paraglide/messages";
     import { getLocale } from "$lib/paraglide/runtime";
+    import { formatPrice } from "$lib/utils/price";
+
+    // stores
     import { cartStore } from "$lib/stores/cart.svelte.js";
 
-	let { product } = $props()
+    // functions
+    let { product } = $props();
+    let hover = $state(false);
 </script>
 
 <a class="product" href="/shop/{product.handle}">
-	<div class="img-wrapper">
+	<div class="img-wrapper" onmouseenter={() => hover = true} onmouseleave={() => hover = false}>
 		{#if product.images.nodes[0]}
-			<img class="img" src={product.images.nodes[0].url} alt={product.images.nodes[0].altText}>
+			<!-- <img class="img" src={product.images.nodes[0].url} alt={product.images.nodes[0].altText}> -->
+			<ImageShopify image={product.images.nodes[0]} />
 		{/if}
 		{#if product.images.nodes[1]}
-			<img class="img hover" src={product.images.nodes[1].url} alt={product.images.nodes[1].altText}>
+			<!-- <img class="img hover" src={product.images.nodes[1].url} alt={product.images.nodes[1].altText}> -->
+			 <div class="hover">
+				<ImageShopify image={product.images.nodes[1]} />
+			 </div>
 		{/if}
         <button 
             class="add-to-cart" 
@@ -25,18 +36,15 @@
             }}
         ></button>
 	</div>
-	<div class="info uppercase">
-		<h4 class="title wo-24">{product.title}</h4>
-		<div class="meta in-14">
+	<div class="info">
+		<h4 class="title wo-24 uppercase">{product.title}</h4>
+		<div class="meta in-13 uppercase">
 			{#if product.collections?.nodes?.length > 0}
-				<span class="collection">{product.collections.nodes[0].singular.value}</span>
+				<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
 			{/if}
 			<p class="price">
 				{#if product.availableForSale}
-                    {new Intl.NumberFormat(getLocale(), {
-                        style: 'currency',
-                        currency: product.priceRange.minVariantPrice.currencyCode
-                    }).format(product.priceRange.minVariantPrice.amount)}
+					{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
                 {:else}
                     {m.sold_out()}
                 {/if}
@@ -46,11 +54,14 @@
 </a>
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
+
 	.product {
 		display: flex;
 		flex-direction: column;
 		row-gap: var(--sp-10);
         position: relative;
+		overflow: hidden;
 
 		&:hover {
 			.img-wrapper {
@@ -78,7 +89,6 @@
 				position: absolute;
 				inset: 0;
 				opacity: 0;
-				transition: var(--transition);
 			}
 
             .add-to-cart {
@@ -126,6 +136,16 @@
 			.meta {
 				display: flex;
 				flex-direction: column;
+				margin-top: var(--sp-2);
+			}
+
+			@media (width <= #{$xxs}) {
+				flex-direction: column;
+
+				.title {
+					width: 100%;
+					padding-right: var(--sp-24);
+				}
 			}
 		}
 	}

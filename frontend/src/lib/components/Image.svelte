@@ -1,6 +1,10 @@
 <script>
+    // imports
     import { urlFor } from '$lib/utils/image.js';
 
+    // stores
+
+    // functions
     let { 
         image,
         aspectRatio = undefined, 

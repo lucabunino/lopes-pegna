@@ -1,6 +1,11 @@
 <script>
+    // imports
     import { urlFor } from "$lib/utils/image";
     import { innerWidth } from "svelte/reactivity/window";
+
+    // stores
+
+    // functions
 	let {
 		video = undefined,
 		videoMobile = undefined,
@@ -8,7 +13,7 @@
 		posterMobile = undefined,
 		cover = false,
 		className = undefined,
-	} = $props()
+	} = $props();
 </script>
 
 <div class="video-wrapper {className} {cover ? 'cover' : undefined}">
@@ -26,6 +31,8 @@
 
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
+
 .video-wrapper {
 	width: auto;
 	height: auto;
@@ -50,7 +57,7 @@
 	.mobile { display: none; }
     .desktop { display: block; }
 	
-    @media (max-width: 1080px) {
+    @media (width <= #{$lg}) {
 		.mobile { display: block; }
         .desktop { display: none; }
     }

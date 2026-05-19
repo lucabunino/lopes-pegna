@@ -1,32 +1,20 @@
 <script>
+    // imports
     import { page } from "$app/state";
     import { browser, dev } from "$app/environment";
     import { urlFor } from "$lib/utils/image";
-    
-    // 1. Handle the array: Extract the first item from the Layout SEO array
+
+    // stores
+
+    // functions
     const seoBase = $derived(Array.isArray(page.data?.seo) ? page.data.seo[0] : page.data?.seo);
     const seoSingle = $derived(page.data?.seoSingle);
-    
     const canonicalUrl = $derived(page.url.origin + page.url.pathname);
-
-    // 2. Logic: If seoSingle exists, use "Page | Base". If not, just "Base" (Homepage)
-    const displayTitle = $derived(
-        seoSingle?.seoTitle 
-            ? `${seoSingle.seoTitle} | ${seoBase?.seoTitle || ''}` 
-            : (seoBase?.seoTitle || "")
-    );
-
-    // 3. Fallback logic for Description
+    const displayTitle = $derived(seoSingle?.seoTitle ? `${seoSingle.seoTitle} | ${seoBase?.seoTitle || ''}` : (seoBase?.seoTitle || ""));
     const rawDesc = $derived(seoSingle?.seoDescription || seoBase?.seoDescription || "");
     const displayDesc = $derived(rawDesc.length > 157 ? rawDesc.slice(0, 157) + "..." : rawDesc);
-
-    // 4. Fallback logic for Social Image
     const seoImgObj = $derived(seoSingle?.seoImage || seoBase?.seoImage);
-    const socialImageUrl = $derived(
-        seoImgObj 
-            ? urlFor(seoImgObj).width(1200).height(630).fit('crop').quality(70).format('jpg').url() 
-            : undefined
-    );
+    const socialImageUrl = $derived(seoImgObj ? urlFor(seoImgObj).width(1200).height(630).fit('crop').quality(70).format('jpg').url() : undefined);
 </script>
 
 <svelte:head>

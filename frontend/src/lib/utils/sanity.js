@@ -50,14 +50,22 @@ export async function getPolicies(lang) {
         { lang }
     );
 }
-export async function getInfo(lang) {
-	console.log(lang);
-	
+export async function getInfo(lang) {	
     return await client.fetch(
         `
         *[ _type == "info" && !(_id in path('drafts.**'))][0] {
             vat,
             "credits": credits[language == $lang][0].value,
+        }
+        `,
+        { lang }
+    );
+}
+export async function getCartInfo(lang) {	
+    return await client.fetch(
+        `
+        *[ _type == "shop" && !(_id in path('drafts.**'))][0] {
+            "cartInfo": cartInfo[language == $lang][0].value[0],
         }
         `,
         { lang }
@@ -197,7 +205,15 @@ export async function getShop(lang) {
         { lang }
     );
 }
-
+export async function getInfoEmail() {	
+    return await client.fetch(
+        `
+        *[ _type == "contacts" && !(_id in path('drafts.**'))][0] {
+            infoEmail,
+        }
+        `
+    );
+}
 
 
 

@@ -1,16 +1,17 @@
-import { getSeo, getPolicies, getContacts, getInfo } from '$lib/utils/sanity';
+import { getSeo, getPolicies, getContacts, getInfo, getCartInfo } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
 import { error } from '@sveltejs/kit';
 
 export async function load({ url, params }) {
 	const lang = params.lang ?? getLocale();
-	let seo, policies, contacts, info;
+	let seo, policies, contacts, info, cartInfo;
 	try {
-		[seo, policies, contacts, info] = await Promise.all([
+		[seo, policies, contacts, info, cartInfo] = await Promise.all([
 			getSeo(lang),
 			getPolicies(lang),
 			getContacts(lang),
 			getInfo(lang),
+			getCartInfo(lang),
 		]);
 	} catch (err) {
 		throw error(500, 'Failed to load page data');
@@ -25,6 +26,7 @@ export async function load({ url, params }) {
 		policies,
 		contacts,
 		info,
+		cartInfo: cartInfo.cartInfo,
 		pathname: url.pathname
 	};
 }

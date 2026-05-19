@@ -24,19 +24,19 @@ export default {
 				field: () => {
 				return (
 					<div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-					<a 
-						href={`https://admin.shopify.com/store/lopes-pegna`} 
-						target="_blank" 
-						rel="noopener noreferrer"
-						style={{
-						display: 'flex', alignItems: 'center', gap: '8px',
-						padding: '8px 12px', backgroundColor: '#f4f4f4', border: '1px solid #ccc',
-						borderRadius: '4px', textDecoration: 'none', color: '#333', fontSize: '13px'
-						}}
-					>
-						<ShopifyIcon />
-						View in Shopify Admin ↗
-					</a>
+						<a 
+							href={`https://admin.shopify.com/store/lopes-pegna`} 
+							target="_blank" 
+							rel="noopener noreferrer"
+							style={{
+							display: 'flex', alignItems: 'center', gap: '8px',
+							padding: '8px 12px', backgroundColor: '#f4f4f4', border: '1px solid #ccc',
+							borderRadius: '4px', textDecoration: 'none', color: '#333', fontSize: '13px'
+							}}
+						>
+							<ShopifyIcon />
+							View in Shopify Admin ↗
+						</a>
 					</div>
 				)
 				}

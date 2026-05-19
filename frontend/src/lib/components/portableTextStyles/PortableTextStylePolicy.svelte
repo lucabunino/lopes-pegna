@@ -1,4 +1,9 @@
 <script>
+    // imports
+
+    // stores
+
+    // functions
     let { 
         portableText,
         children 

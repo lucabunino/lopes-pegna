@@ -1,6 +1,10 @@
 <script>
-	import { fade } from 'svelte/transition';
-	
+    // imports
+    import { fade } from 'svelte/transition';
+
+    // stores
+
+    // functions
     let { 
         portableText,
         children 
