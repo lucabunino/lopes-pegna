@@ -134,7 +134,7 @@
 		}
 
 		@media (width <= #{$lg}) {
-			padding: var(--sp-24) var(--sp-12) var(--sp-120);
+			padding: var(--sp-24) var(--sp-12) var(--sp-154);
 			gap: var(--sp-24);
 
 			.footer {
