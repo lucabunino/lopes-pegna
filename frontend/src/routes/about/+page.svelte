@@ -3,15 +3,29 @@
     import Media from '$lib/components/Media.svelte';
     import { PortableText } from '@portabletext/svelte';
     import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
+	import { m } from '$lib/paraglide/messages.js';
+	import bp from '$lib/scss/breakpoints.module.scss';
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
+    import { innerWidth } from 'svelte/reactivity/window';
 
     // functions
     let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(true); menuer.setSmall(false);
     let { data } = $props();
+
+	$effect(() => {
+		if (innerWidth.current <= parseInt(bp.md)) {
+			menuer.setDifference(false);
+		}
+	})
 </script>
 
+<nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
+	<ol>
+		<li><a href="/about">{m.about()}</a></li>
+	</ol>
+</nav>
 <main>
 	<section id="hero">
 		{#if data.about.heroMedia}
@@ -82,16 +96,15 @@ main {
 			display: contents;
 			:global(figure:nth-child(1)) {
 				grid-row: 1;
-				padding-top: var(--sp-150);
 				height: 60vh;
 				min-height: 350px;
 				max-height: 500px;
 			}
 			:global(figure:nth-child(2)) {
 				grid-row: -2 / -1;
-				height: calc(60vh - var(--sp-150));
-				min-height: calc(350px - var(--sp-150));
-				max-height: calc(500px - var(--sp-150));
+				height: calc(60vh);
+				min-height: calc(350px);
+				max-height: calc(500px);
 			}
 		}
 

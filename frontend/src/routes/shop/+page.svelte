@@ -13,11 +13,13 @@
     import { collectionSlugMap } from '$lib/collectionSlugs';
     import { formatPrice } from '$lib/utils/price';
     import bp from '$lib/scss/breakpoints.module.scss';
+    import { register } from 'swiper/element/bundle';
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
 
     // functions
+    register();
     let menuer = getMenu(); menuer.setDark(false); menuer.setSmall(false);
     let { data } = $props();
     const currentLocale = getLocale();
@@ -29,6 +31,7 @@
     let loaded = $state(false);
     let isLoading = $state(false);
     let DURATION = $derived(innerWidth.current > 768 ? 200 : 0);
+    let swiperEl = $state();
     
     let activeCategory = $derived.by(() => {
         const slug = page.url.searchParams.get('category') || 'all';
@@ -56,7 +59,7 @@
                 case 'number-asc': return (parseInt(a.title.replace(/\D/g, '')) || 0) - (parseInt(b.title.replace(/\D/g, '')) || 0);
                 case 'number-desc': return (parseInt(b.title.replace(/\D/g, '')) || 0) - (parseInt(a.title.replace(/\D/g, '')) || 0);
                 case 'new-asc': return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
-                case 'new-desc': return new Date(b.createdAt || 0) - new Date(b.createdAt || 0);
+                case 'new-desc': return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
                 default: return 0;
             }
         });
@@ -70,26 +73,25 @@
     });
 
     $effect(() => {
-        if (innerWidth.current <= 678 && activeView === 'list' && productsContainer) {
-            const handleScroll = () => {
-                const elements = productsContainer.querySelectorAll('.product');
-                let closest = null;
-                let minDistance = Infinity;
-                const center = Math.min(Math.max(window.innerHeight / 100 * 60, 350), 450) + filtersHeight + 18;
-
-                elements.forEach((el, index) => {
-                    const rect = el.getBoundingClientRect();
-                    const distance = Math.abs(center - (rect.top + rect.height / 2));
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closest = processedProducts[index];
+        if (activeView === 'list' && innerWidth.current <= parseInt(bp.md) && swiperEl) {
+            const swiperParams = {
+                direction: 'vertical',
+                slidesPerView: 'auto',
+                centeredSlides: false,
+				freeMode: true,
+                mousewheel: {
+					forceToAxis: true,
+					sensitivity: 1,
+					thresholdDelta: 10, 
+				},
+                on: {
+                    slideChange: (s) => {
+                        hoveredProduct = processedProducts[s.activeIndex];
                     }
-                });
-                if (closest && closest.id !== hoveredProduct?.id) hoveredProduct = closest;
+                }
             };
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            handleScroll();
-            return () => window.removeEventListener('scroll', handleScroll);
+            Object.assign(swiperEl, swiperParams);
+            swiperEl.initialize();
         }
     });
 
@@ -222,12 +224,6 @@
 	</section>
 
 	<section id="products" class:loaded={loaded}>
-		{#if activeView === 'list'}
-			<div class="roulette-lines">
-				<div class="line top"></div>
-				<div class="line bottom"></div>
-			</div>
-		{/if}
 		{#key activeView}
 			<div bind:this={productsContainer} class="products-container"
 				data-view={activeView}
@@ -247,29 +243,57 @@
 						</div>
 					{/if}
 				{:else}
-					{#each processedProducts as product (product.id)}
-						<a 
-							class="product" 
-							data-id={product.id}
-							class:active={hoveredProduct?.id === product.id}
-							href="/shop/{product.handle}" 
-							onmouseenter={() => hoveredProduct = product}
-						>
-							<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
-							<p class="info in-15 in-13-mb uppercase">
-								{#if product.collections?.nodes?.length > 0}
-									<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
-								{/if}
-								<span class="price">
-									{#if product.availableForSale}
-										{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
-									{:else}
-										{m.sold_out()}
+					<div class="list-desktop">
+						{#each processedProducts as product (product.id)}
+							<a 
+								class="product" 
+								class:active={hoveredProduct?.id === product.id}
+								href="/shop/{product.handle}" 
+								onmouseenter={() => hoveredProduct = product}
+							>
+								<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
+								<p class="info in-15 in-13-mb uppercase">
+									{#if product.collections?.nodes?.length > 0}
+										<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
 									{/if}
-								</span>
-							</p>
-						</a>
-					{/each}
+									<span class="price">
+										{#if product.availableForSale}
+											{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
+										{:else}
+											{m.sold_out()}
+										{/if}
+									</span>
+								</p>
+							</a>
+						{/each}
+					</div>
+					<div class="list-mobile">
+						<swiper-container bind:this={swiperEl} init="false">
+							{#each processedProducts as product (product.id)}
+								<swiper-slide>
+									<a 
+										class="product" 
+										class:active={hoveredProduct?.id === product.id}
+										href="/shop/{product.handle}"
+									>
+										<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
+										<p class="info in-15 in-13-mb uppercase">
+											{#if product.collections?.nodes?.length > 0}
+												<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
+											{/if}
+											<span class="price">
+												{#if product.availableForSale}
+													{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
+												{:else}
+													{m.sold_out()}
+												{/if}
+											</span>
+										</p>
+									</a>
+								</swiper-slide>
+							{/each}
+						</swiper-container>
+					</div>
 				{/if}
 			</div>
 		{/key}
@@ -278,8 +302,13 @@
 
 <style lang="scss">
 @use '$lib/scss/breakpoints.module' as *;
+
 main {
-	padding-bottom: var(--sp-120);
+	margin-bottom: var(--sp-120);
+
+	@media (width <= #{$lg}) {
+		overflow: hidden;
+	}
 }
 #hero {
 	height: 70vh;
@@ -469,18 +498,6 @@ main {
 			position: sticky;
 			background-color: var(--white);
 			z-index: 5;
-			border-bottom: solid 1px var(--black);
-			margin-bottom: var(--sp-6);
-
-			&::after {
-				content: "";
-				position: absolute;
-				left: 0;
-				bottom: calc(2rem*-1.3 - 1rem);
-				width: 100%;
-				border-bottom: solid 1px var(--black);
-				pointer-events: none;
-			}
 
 			.categories-and-sorting {
 				display: none;
@@ -545,34 +562,8 @@ main {
 #products {
     padding: var(--sp-60) var(--sp-24) 0;
 	opacity: 0;
+
 	&.loaded { opacity: 1; }
-	position: relative;
-
-	.roulette-lines {
-		display: none;
-		position: fixed;
-		top: 50%;
-		left: 0;
-		width: 100%;
-		height: var(--sp-60);
-		transform: translateY(-50%);
-		pointer-events: none;
-		z-index: 5;
-
-		.line {
-			position: absolute;
-			left: 0;
-			width: 100%;
-			border-bottom: 1px solid var(--black);
-			
-			&.top { top: 0; }
-			&.bottom { bottom: 0; }
-		}
-
-		@media (width <= 768px) {
-			display: block;
-		}
-	}
 
     .products-container {
         &[data-view="grid"] {
@@ -587,34 +578,118 @@ main {
             display: flex;
             flex-direction: column;
 
-            .product {
+            .list-desktop {
                 display: flex;
-                justify-content: space-between;
-                align-items: center;
-				padding: 0 var(--sp-24) 0 0;
-				width: 50%;
+                flex-direction: column;
+				
+                @media (width <= #{$lg}) {
+                    padding: 0 var(--sp-12);
+                }
+                @media (width <= #{$md}) {
+                    display: none;
+                }
 
-				.title {
-					opacity: .2;
+                .product {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 var(--sp-24) 0 0;
+                    width: 50%;
 
-					&.soldOut {
-						text-decoration: line-through;
-					}
-				}
+                    .title {
+                        opacity: .2;
 
-				.info {
-					display: flex;
-					flex-direction: column;
-					text-align: right;
-					opacity: 0;
-				}
+                        &.soldOut {
+                            text-decoration: line-through;
+                        }
+                    }
 
-				&.active {
-					.title {
-						opacity: 1;
-					}
                     .info {
-						opacity: 1;
+                        display: flex;
+                        flex-direction: column;
+                        text-align: right;
+                        opacity: 0;
+                    }
+
+                    &.active {
+                        .title {
+                            opacity: 1;
+                        }
+                        .info {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            .list-mobile {
+                display: none;
+				
+                @media (width <= #{$md}) {
+                    display: block;
+                    position: relative;
+                    height: calc(100vh - 60vh);
+                    margin-top: 0;
+                    padding: 0 var(--sp-12);
+					background-color: var(--white);
+					z-index: 10;
+
+                    &::before, &::after {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        width: 100%;
+                        height: 1px;
+                        background: var(--black);
+                        z-index: 10;
+                        pointer-events: none;
+                    }
+                    &::before { top: 0; }
+                    &::after { top: var(--sp-60); }
+
+                    swiper-container {
+                        height: 100%;
+                        
+                        swiper-slide {
+                            display: flex;
+                            align-items: center;
+                            color: var(--darkGray);
+							height: var(--sp-60);
+
+                            &:global(.swiper-slide-active) {
+                                color: var(--black);
+                            }
+                            &:global(:last-of-type) {
+                                margin-bottom: calc(100% - var(--sp-60)*3);
+                            }
+
+                            .product {
+                                width: 100%;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: var(--sp-24) 0;
+                                column-gap: var(--sp-12);
+
+                                .title {
+                                    flex-basis: calc(50% - var(--sp-6));
+                                }
+
+                                .info {
+                                    display: none;
+                                    
+                                    .price {
+                                        margin-left: auto;
+                                    }
+                                }
+
+                                &.active {
+                                    .info {
+                                        display: contents;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -630,53 +705,11 @@ main {
     }
 
 	@media (width <= #{$lg}) {
-		padding: 0 var(--sp-12) 0;
+		padding: 0;
 
 		.products-container {
 			&[data-view="grid"] {
 				row-gap: var(--sp-40);
-			}
-		}
-	}
-
-
-	@media (width <= 768px) {
-		.products-container {
-			&[data-view="list"] {
-				display: flex;
-				flex-direction: column;
-				position: relative;
-				row-gap: var(--sp-12);
-				padding: 40vh 0;
-				scroll-snap-type: y mandatory;
-
-				.product {
-					padding: 0;
-					width: 100%;
-					column-gap: var(--sp-12);
-					scroll-snap-align: center;
-					min-height: var(--sp-60);
-					display: flex;
-					align-items: center;
-
-					.title {
-						flex-basis: calc(50% - var(--sp-6));
-					}
-					
-					.info {
-						display: none;
-
-						.price {
-							margin-left: auto;
-						}
-					}
-
-					&.active {
-						.info {
-							display: contents;
-						}
-					}
-				}
 			}
 		}
 	}

@@ -84,10 +84,6 @@
 			overflow: hidden;
 			background-color: var(--lightGray);
 			transition: var(--transition);
-
-			@media (pointer: coarse) {
-				border-radius: var(--sp-24);
-			}
 			
 			.hover {
 				position: absolute;

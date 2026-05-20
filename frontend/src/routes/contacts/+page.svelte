@@ -15,7 +15,12 @@
     let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(false); menuer.setSmall(false);
 </script>
 
-<main class="wo-24">
+<nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
+	<ol>
+		<li><a href="/contacts">{m.contacts()}</a></li>
+	</ol>
+</nav>
+<main class="wo-24 wo-15-mb">
 	{#if data.contacts.heroMedia}
 		<section id="hero">
 			<Media media={data.contacts.heroMedia} cover={true}/>
@@ -152,5 +157,55 @@
 		min-height: 500px;
 		max-height: 700px;
 		position: relative;
+	}
+	@media (width <= #{$lg}) {
+		#hero {
+			height: 60vh;
+			min-height: 350px;
+			max-height: 500px;
+		}
+		#contacts {
+			padding: var(--sp-30) var(--sp-12) 0;
+			grid-template-columns: repeat(1, 1fr);
+
+			.section-title {
+				display: none;
+			}
+			.contacts {
+				grid-column: 1 / span 1;
+
+				label {
+					margin-bottom: var(--sp-9);
+				}
+			}
+		}
+		#slider {
+			padding: var(--sp-48) 0 0;
+		}
+		#appointment {
+			padding: var(--sp-48) var(--sp-12);
+			grid-template-columns: repeat(1, 1fr);
+
+			.section-title {
+				margin-bottom: var(--sp-9);
+			}
+			.contacts {
+				grid-column: 1 / span 1;
+			}
+		}
+		#closing {
+			padding: 0 0 var(--sp-200);
+		}
+	}
+	@media (width <= #{$md}) {
+		
+	}
+	@media (width <= #{$sm}) {
+		#hero {
+			max-height: 400px;
+		}
+	}
+	@media (width <= #{$xxs}) {
+		
 	}
 </style>

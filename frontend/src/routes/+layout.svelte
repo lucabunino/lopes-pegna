@@ -12,11 +12,17 @@
 
     // stores
     import { cartStore } from '$lib/stores/cart.svelte.js';
+    import { blur, fade } from 'svelte/transition';
+    import { page } from '$app/state';
+    import { innerWidth } from 'svelte/reactivity/window';
+	import bp from '$lib/scss/breakpoints.module.scss';
 
     // functions
     let { data, children } = $props();
+	let loaded = $state(false)
     onMount(() => {
         cartStore.init();
+		loaded = true;
     });
 </script>
 
@@ -24,7 +30,16 @@
 
 
 <Head />
-<Header />
-<Cart cartInfo={data.cartInfo}/>
-{@render children()}
-<Footer policies={data.policies} contacts={data.contacts} info={data.info}/>
+
+{#if loaded}
+	<div class="site-wrapper">
+		<Header />
+		<Cart cartInfo={data.cartInfo}/>
+		{#key page.url}
+			<div class="page-wrapper">
+				{@render children()}
+			</div>
+		{/key}
+		<Footer policies={data.policies} contacts={data.contacts} info={data.info}/>
+	</div>
+{/if}

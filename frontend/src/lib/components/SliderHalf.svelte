@@ -3,7 +3,7 @@
     // imports
     import { onMount } from 'svelte';
     import { dev } from '$app/environment';
-    import { register } from 'swiper/element/bundle'; 
+    import { register } from 'swiper/element/bundle';register()
     import { innerHeight, innerWidth } from 'svelte/reactivity/window';
     import Media from './Media.svelte';
     import { urlFor } from '$lib/utils/image.js';

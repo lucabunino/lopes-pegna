@@ -77,7 +77,7 @@
 
 		&.bookCover::after {
 			content: '';
-			background-image: url('/img/shadow.webp');
+			background-image: url('./img/shadow.webp');
 			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: right;

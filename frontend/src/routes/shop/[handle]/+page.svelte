@@ -178,6 +178,7 @@
 				// width: calc(100vh / 4*3);
 				// max-width: 50vw;
 				width: 50%;
+				height: fit-content;
 			};
 
 			.right {
@@ -280,8 +281,8 @@
 
 				.left-mobile {
 					display: block;
-					height: calc(70vw/3*4);
 					margin-top: var(--sp-100);
+					height: 50vh;
 				}
 
 				.right {
@@ -340,6 +341,15 @@
 							text-align: center;
 							border: solid 1px var(--black);
 							padding: 1em 2em;
+
+							&:hover {
+								background-color: var(--black);
+								color: var(--white);
+
+								&::before {
+									width: 0;
+								}
+							}
 						}
 					}
 				}

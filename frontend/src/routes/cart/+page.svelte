@@ -22,6 +22,11 @@
     };
 </script>
 
+<nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
+	<ol>
+		<li><a href="/cart">{m.cart()}</a></li>
+	</ol>
+</nav>
 <main id="cart-page" class="in-14">
 	<div class="cart-header uppercase">
         <h1 class="uppercase">{m.cart()}</h1>

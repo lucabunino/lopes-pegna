@@ -14,6 +14,11 @@
     let { data } = $props();
 </script>
 
+<nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
+	<ol>
+		<li><a href="/beads">{m.beads()}</a></li>
+	</ol>
+</nav>
 <main>
 	<section id="hero">
 		{#if data.beads.heroMedia}
@@ -21,7 +26,7 @@
 		{/if}
 	</section>
 	{#if data.beads.content}
-		<section id="content" class="portableText content wo-18">
+		<section id="content" class="portableText content wo-18 wo-15-mb">
 			<PortableText
 			value={data.beads.content}
 			components={{
@@ -64,10 +69,10 @@
 							</div>
 						{/if}
 						{#if book.title}
-							<h4 class="wo-24 title">{book.title}</h4>
+							<h4 class="wo-24 wo-15-mb title">{book.title}</h4>
 						{/if}
 						{#if book.info}
-							<p class="info in-15">{book.info}</p>
+							<p class="info in-15 in-13-mb">{book.info}</p>
 						{/if}
 						{#if book.href}
 							<button class="cta btn-m in-12 uppercase" href={book.href} target="_blank" rel="noopener noreferrer">Scopri di più</button>
@@ -81,6 +86,8 @@
 
 <style lang="scss">
 @use '$lib/scss/breakpoints.module' as *;
+
+main {
 	#hero {
 		height: 70vh;
 		min-height: 500px;
@@ -110,7 +117,7 @@
 		column-gap: var(--sp-6);
 	}
 	#books {
-		padding: var(--sp-160) var(--sp-24) var(--sp-200);
+		padding: var(--sp-152) var(--sp-24) var(--sp-200);
 
 		.intro {
 			max-width: 600px;
@@ -121,6 +128,7 @@
 			display: grid;
 			grid-template-columns: repeat(4, 1fr);
 			column-gap: var(--sp-6);
+			row-gap: var(--sp-60);
 
 			.book {
 				display: flex;
@@ -161,4 +169,49 @@
 			}
 		}
 	}
+
+	@media (width <= #{$lg}) {
+		#hero {
+			height: 60vh;
+			min-height: 350px;
+			max-height: 500px;
+		}
+		#content {
+			padding: var(--sp-24) var(--sp-12) var(--sp-200);
+			grid-template-columns: 1fr;
+		}
+		#books {
+			padding: var(--sp-160) var(--sp-12) var(--sp-200);
+			.books {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+	}
+	@media (width <= #{$md}) {
+		display: grid;
+		grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+
+		#content {
+			padding: var(--sp-24) var(--sp-12) var(--sp-48);
+		}
+		#books {
+			.books {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+	}
+	@media (width <= #{$sm}) {
+		#hero {
+			max-height: 400px;
+		}
+	}
+	@media (width <= #{$xxs}) {
+		#books {
+			.books {
+				grid-template-columns: repeat(1, 1fr);
+			}
+		}
+	}
+}
 </style>

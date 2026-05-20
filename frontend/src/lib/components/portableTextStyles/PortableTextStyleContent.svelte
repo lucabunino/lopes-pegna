@@ -110,6 +110,7 @@
 		figure {
 			grid-column: 1 / span 1;
 			margin: var(--sp-36) auto;
+			height: fit-content;
 		}
 		h2 {
 			grid-column: 1 / span 1;
@@ -129,13 +130,12 @@
 		figure {
 			margin: var(--sp-36) calc(var(--sp-12)*-1);
 			max-width: unset;
-			height: fit-content;
 
 			:global(.image-wrapper) {
 				:global(img) {
-					height: calc(60vh - var(--sp-150));
-					min-height: calc(350px - var(--sp-150));
-					max-height: calc(500px - var(--sp-150));
+					height: calc(60vh);
+					min-height: calc(350px);
+					max-height: calc(500px);
 				}
 			}
 
@@ -151,7 +151,7 @@
 		figure {
 			:global(.image-wrapper) {
 				:global(img) {
-					max-height: calc(400px - var(--sp-150));
+					max-height: calc(400px);
 				}
 			}
 		}

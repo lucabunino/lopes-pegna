@@ -2,11 +2,12 @@
     // imports
     import { page } from "$app/state";
     import { fly } from "svelte/transition";
-    import { innerHeight } from "svelte/reactivity/window";
+    import { innerHeight, innerWidth } from "svelte/reactivity/window";
     import LogoSvg from "$lib/components/LogoSvg.svelte";
     import { m } from "$lib/paraglide/messages";
     import { getLocale, locales, localizeHref, setLocale } from '$lib/paraglide/runtime';
     import { useScrollLock } from '$lib/utils/scrollLock.svelte.js';
+	import bp from '$lib/scss/breakpoints.module.scss';
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
@@ -23,13 +24,62 @@
             if (scrollY > 100) menuer.setSmall(true);
             else menuer.setSmall(false);
         }
+		
         if (page.route.id === '/') {
+			console.log("homepage");
             if (scrollY >= innerHeight.current - 32 - 13*1.2) menuer.setDifference(true)
             else menuer.setDifference(false)
         }
-        if ((page.route.id === '/shop' && page.url.searchParams.get('view') !== 'list') || page.route.id === '/beads' || page.route.id === '/contacts') {
-            if (scrollY >= Math.min(Math.max(innerHeight.current/100*70, 500), 650) - 32 - 13*1.2) menuer.setDifference(true)
-            else menuer.setDifference(false)
+		
+        if ((page.route.id === '/shop' && page.url.searchParams.get('view') !== 'list') || page.route.id === '/beads' || page.route.id === '/contacts') {			
+			if (innerWidth.current > parseInt(bp.lg)) {
+				console.log("lar");
+				if (scrollY >= Math.min(Math.max(innerHeight.current/100*70, 500), 650) - 32 - 13*1.2) {
+					menuer.setDifference(true)
+					return
+				} else {
+					menuer.setDifference(false)
+				}
+			}
+			if (innerWidth.current > parseInt(bp.sm) && innerWidth.current <= parseInt(bp.lg)) {
+				console.log("mid");
+				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 500) - 32 - 13*1.2) {
+					menuer.setDifference(true)
+					return
+				} else {
+					menuer.setDifference(false)
+				}
+			}
+            if (innerWidth.current <= parseInt(bp.sm)) {
+				console.log("sm");
+				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 400) - 40 - 13*1.2) {
+					menuer.setDifference(true)
+					return
+				} else {
+					menuer.setDifference(false)
+				}
+			}
+        }
+        if (page.route.id === '/about') {
+			if (innerWidth.current > parseInt(bp.sm) && innerWidth.current <= parseInt(bp.lg)) {
+				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 500) - 32 - 13*1.2) {
+					menuer.setDifference(true)
+					return
+				} else {
+					menuer.setDifference(false)
+				}
+			}
+			if (innerWidth.current <= parseInt(bp.sm)) {
+				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 400) - 40 - 13*1.2) {
+					menuer.setDifference(true)
+					return
+				} else {
+					menuer.setDifference(false)
+				}
+			}
+			if (innerWidth.current > parseInt(bp.md)) {
+				menuer.setDifference(true)
+			}
         }
     })
 </script>
@@ -71,7 +121,6 @@
 						class="menu-item btn-s in-13 uppercase in-24-mb normalcase-mb" 
 						onclick={(e) => {
 							e.preventDefault();
-							menuer.setOpen(false);
 							cartStore.isOpen = true;
 						}}
 					>
@@ -118,36 +167,24 @@ header nav {
 	}
 	
 	&.dark {
-		@media (width > #{$lg}) {
-            color: var(--black);
-        }
-		@media (width <= #{$lg}) {
-			.logo-mobile {
-				color: var(--black);
-			}
-        }
+		color: var(--black);
+		.logo-mobile {
+			color: var(--black);
+		}
 	}
 	&.light {
-		@media (width > #{$lg}) {
-            color: var(--white);
-        }
-		@media (width <= #{$lg}) {
-			.logo-mobile {
-				color: var(--white);
-			}
-        }
+		color: var(--white);
+		.logo-mobile {
+			color: var(--white);
+		}
 	}
-	&.difference:not(.open) { 
-		@media (width > #{$lg}) {
-            color: var(--difference);
+	&.difference:not(.open) {
+		color: var(--difference);
+		mix-blend-mode: difference;
+		.logo-mobile {
+			color: var(--difference);
 			mix-blend-mode: difference;
-        }
-		@media (width <= #{$lg}) {
-			.logo-mobile {
-				color: var(--difference);
-				mix-blend-mode: difference;
-			}
-        }
+		}
 	}
 
     .menu-switch {
@@ -166,7 +203,7 @@ header nav {
 		align-items: center;
 		border-color: var(--white);
 		box-shadow: 0px 5px 10px 1px rgba($color: #000000, $alpha: .1);
-
+		
 		&:hover {
 			background: var(--lightGray);
 			border-color: var(--lightGray);
@@ -335,14 +372,19 @@ header nav {
 			color: var(--white);
 		}
 		.menu {
-			background-color: #000;
 			opacity: 1;
+			transition-delay: 0ms;
 			pointer-events: all;
 
 			.menu-item {
 				opacity: 1;
 				color: var(--white);
 				pointer-events: all;
+				transition-delay: 0ms;
+			}
+
+			@media (width <= #{$lg}) {
+				background-color: var(--black);
 			}
 		}
 	}

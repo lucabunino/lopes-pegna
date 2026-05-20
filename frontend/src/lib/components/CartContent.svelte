@@ -58,6 +58,7 @@
 	.cart-content {
 		flex: 1;
 		overflow-y: auto;
+		min-height: var(--sp-200);
 		
 		.empty-msg {
 			text-align: center;
