@@ -222,6 +222,12 @@
 	</section>
 
 	<section id="products" class:loaded={loaded}>
+		{#if activeView === 'list'}
+			<div class="roulette-lines">
+				<div class="line top"></div>
+				<div class="line bottom"></div>
+			</div>
+		{/if}
 		{#key activeView}
 			<div bind:this={productsContainer} class="products-container"
 				data-view={activeView}
@@ -244,6 +250,7 @@
 					{#each processedProducts as product (product.id)}
 						<a 
 							class="product" 
+							data-id={product.id}
 							class:active={hoveredProduct?.id === product.id}
 							href="/shop/{product.handle}" 
 							onmouseenter={() => hoveredProduct = product}
@@ -295,11 +302,13 @@ main {
 			rgba(0, 0, 0, 0) 100%
 		);
 	}
-
 	@media (width <= #{$lg}) {
 		height: 60vh;
 		min-height: 350px;
-		max-height: 450px;
+		max-height: 500px;
+	}
+	@media (width <= #{$sm}) {
+		max-height: 400px;
 	}
 }
 
@@ -329,14 +338,20 @@ main {
 		width: 100%;
 		height: 60vh;
 		min-height: 350px;
-		max-height: 450px;
+		max-height: 500px;
 		z-index: 6;
 		
 		.img-wrapper {
 			position: relative;
 			height: 60vh;
 			min-height: 350px;
-			max-height: 450px;
+			max-height: 500px;
+		}
+	}
+	@media (width <= #{$sm}) {
+		max-height: 400px;
+		.img-wrapper {
+			max-height: 400px;
 		}
 	}
 }
@@ -447,11 +462,10 @@ main {
 	}
 
 	@media (width <= #{$md}) {
-
 		&[data-view="list"] {
 			margin-top: unset;
 			justify-content: flex-end;
-			top: clamp(350px, 60vh, 450px);
+			top: clamp(350px, 60vh, 500px);
 			position: sticky;
 			background-color: var(--white);
 			z-index: 5;
@@ -496,6 +510,12 @@ main {
 		}
 	}
 
+	@media (width <= #{$sm}) {
+		&[data-view="list"] {
+			top: clamp(350px, 60vh, 400px);
+		}
+	}
+
 	@media (width <= #{$xs}) {
 		.categories-and-sorting {
 			flex-direction: column;
@@ -526,6 +546,33 @@ main {
     padding: var(--sp-60) var(--sp-24) 0;
 	opacity: 0;
 	&.loaded { opacity: 1; }
+	position: relative;
+
+	.roulette-lines {
+		display: none;
+		position: fixed;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		height: var(--sp-60);
+		transform: translateY(-50%);
+		pointer-events: none;
+		z-index: 5;
+
+		.line {
+			position: absolute;
+			left: 0;
+			width: 100%;
+			border-bottom: 1px solid var(--black);
+			
+			&.top { top: 0; }
+			&.bottom { bottom: 0; }
+		}
+
+		@media (width <= 768px) {
+			display: block;
+		}
+	}
 
     .products-container {
         &[data-view="grid"] {
@@ -600,12 +647,17 @@ main {
 				flex-direction: column;
 				position: relative;
 				row-gap: var(--sp-12);
-				padding-bottom: var(--sp-12);
+				padding: 40vh 0;
+				scroll-snap-type: y mandatory;
 
 				.product {
 					padding: 0;
 					width: 100%;
 					column-gap: var(--sp-12);
+					scroll-snap-align: center;
+					min-height: var(--sp-60);
+					display: flex;
+					align-items: center;
 
 					.title {
 						flex-basis: calc(50% - var(--sp-6));

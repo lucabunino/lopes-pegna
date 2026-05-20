@@ -49,7 +49,10 @@
 			@media (width <= #{$lg}) {
 				height: 60vh;
 				min-height: 350px;
-				max-height: 450px;
+				max-height: 500px;
+			}
+			@media (width <= #{$sm}) {
+				max-height: 400px;
 			}
 		}
 	}
@@ -80,7 +83,15 @@
 					width: 100%;
 					height: 60vh;
 					min-height: 350px;
-					max-height: 450px;
+					max-height: 500px;
+				}
+			}
+		}
+		@media (width <= #{$sm}) {
+			:global(.setsMedia) {		
+				:global(img),
+				:global(video) {
+					max-height: 400px;
 				}
 			}
 		}
@@ -108,7 +119,15 @@
 				:global(video) {
 					height: auto;
 					min-height: 350px;
-					max-height: 450px;
+					max-height: 500px;
+				}
+			}
+		}
+		@media (width <= #{$sm}) {
+			:global(.beadsImages) {		
+				:global(img),
+				:global(video) {
+					max-height: 400px;
 				}
 			}
 		}

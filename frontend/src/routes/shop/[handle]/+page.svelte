@@ -41,11 +41,11 @@
 					<ImageShopify {image} />
 				{/each}
 			</div>
-			{#if innerWidth.current <= parseInt(bp.lg)}
-				<div class="slider-wrapper">
+			<div class="left-mobile">
+				{#if innerWidth.current <= parseInt(bp.lg)}
 					<SliderMarqueeShopify slides={product.images.nodes} />
-				</div>
-			{/if}
+				{/if}
+			</div>
 		{/if}
 		<div class="right">
 			<p class="breadcrumb in-14"><a href="/shop">{m.shop()}</a> • <a class="uppercase" href="/shop/{product.handle}">{product.title}</a></p>
@@ -278,7 +278,9 @@
 					display: none;
 				}
 
-				.slider-wrapper {
+				.left-mobile {
+					display: block;
+					height: calc(70vw/3*4);
 					margin-top: var(--sp-100);
 				}
 
