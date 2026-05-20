@@ -11,17 +11,14 @@
 
     // functions
     let { product } = $props();
-    let hover = $state(false);
 </script>
 
 <a class="product" href="/shop/{product.handle}">
-	<div class="img-wrapper" onmouseenter={() => hover = true} onmouseleave={() => hover = false}>
+	<div class="img-wrapper">
 		{#if product.images.nodes[0]}
-			<!-- <img class="img" src={product.images.nodes[0].url} alt={product.images.nodes[0].altText}> -->
 			<ImageShopify image={product.images.nodes[0]} />
 		{/if}
 		{#if product.images.nodes[1]}
-			<!-- <img class="img hover" src={product.images.nodes[1].url} alt={product.images.nodes[1].altText}> -->
 			 <div class="hover">
 				<ImageShopify image={product.images.nodes[1]} />
 			 </div>
@@ -63,15 +60,17 @@
         position: relative;
 		overflow: hidden;
 
-		&:hover {
-			.img-wrapper {
-				border-radius: var(--sp-24);
-				.hover {
-					opacity: 1;
+		@media (pointer: fine) {
+			&:hover {
+				.img-wrapper {
+					border-radius: var(--sp-24);
+					.hover {
+						opacity: 1;
+					}
+					.add-to-cart {
+						opacity: 1;
+					}
 				}
-                .add-to-cart {
-                    opacity: 1;
-                }
 			}
 		}
 
@@ -117,11 +116,14 @@
                 
                 &::before { width: var(--sp-16); height: 2px; }
                 &::after { width: 2px; height: var(--sp-16); }
-                
-                &:hover {
-                    background: var(--black);
-                    color: var(--white);
-                }
+
+
+                @media (pointer: fine) {
+					&:hover {
+						background: var(--black);
+						color: var(--white);
+					}
+				}
 
 				@media (pointer: coarse) {
 					opacity: 1;

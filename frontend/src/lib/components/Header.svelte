@@ -94,10 +94,10 @@
 				<div class="line"></div>
 			</div>
 		</button>
-		<a href="/" class="logo-mobile menu-item" aria-label="Marco Menghi"
+		<a href="/" class="logo-mobile menu-item" aria-label="Logo"
 		onclick={() => {menuer.setOpen(false);}}
-		onmouseenter={() => {hoverLogo = true}}
-		onmouseleave={() => {hoverLogo = false}}
+		onmouseenter={(e) => {if (e.type == "click") hoverLogo = true}}
+		onmouseleave={(e) => {if (e.type == "click") hoverLogo = false}}
 		>
 			<LogoSvg {hoverLogo}/>
 		</a>
@@ -107,10 +107,10 @@
 				<li class="about"><a class="menu-item btn-s" aria-current={page.route.id === '/about' ? 'page' : undefined} href="/about" onclick={() => {menuer.setOpen(false)}}>{m.about()}</a></li>
 				<li class="beads"><a class="menu-item btn-s" aria-current={page.route.id === '/beads' ? 'page' : undefined} href="/beads" onclick={() => {menuer.setOpen(false)}}>{m.beads()}</a></li>
 			</div>
-        	<a href="/" class="logo menu-item" aria-label="Marco Menghi"
+        	<a href="/" class="logo menu-item" aria-label="Logo"
 			onclick={() => {menuer.setOpen(false);}}
-			onmouseenter={() => {hoverLogo = true}}
-			onmouseleave={() => {hoverLogo = false}}
+			onmouseenter={(e) => {if (e.type == "click") hoverLogo = true}}
+			onmouseleave={(e) => {if (e.type == "click") hoverLogo = false}}
 			>
 				<LogoSvg {hoverLogo}/>
 			</a>

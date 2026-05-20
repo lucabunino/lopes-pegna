@@ -35,7 +35,7 @@
 	<div class="site-wrapper">
 		<Header />
 		<Cart cartInfo={data.cartInfo}/>
-		{#key page.url}
+		{#key page.route.id}
 			<div class="page-wrapper">
 				{@render children()}
 			</div>

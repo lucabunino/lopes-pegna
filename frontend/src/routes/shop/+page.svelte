@@ -116,7 +116,7 @@
 	{#if activeView === 'list'}
 		<div id="list-img" class:loaded={loaded}>
 			{#key hoveredProduct}
-				<div class="img-wrapper" in:fade|global={{ duration: DURATION }} out:fade|global={{ duration: DURATION }}>
+				<div class="img-wrapper" in:fade|global={{ duration: DURATION, delay: DURATION }} out:fade|global={{ duration: DURATION }}>
 					{#if hoveredProduct.listImage?.reference?.image}
 						<ImageShopify image={hoveredProduct.listImage.reference.image}/>
 					{/if}
@@ -203,7 +203,7 @@
 			<div bind:this={productsContainer} class="products-container"
 				data-view={activeView}
 				style="--activeCols: {activeCols};"
-				in:blur={{ duration: DURATION, axis: 'y', delay: 200 }}
+				in:blur={{ duration: DURATION, axis: 'y', delay: DURATION }}
 				out:blur={{ duration: DURATION, axis: 'y' }}
 			>
 				{#if activeView === 'grid'}
@@ -224,7 +224,7 @@
 								class="product" 
 								class:active={hoveredProduct?.id === product.id}
 								href="/shop/{product.handle}" 
-								onmouseenter={() => hoveredProduct = product}
+								onmouseenter={(e) => {if (e.type == "click") hoveredProduct = product}}
 							>
 								<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
 								<p class="info in-15 in-13-mb uppercase">
@@ -302,7 +302,7 @@ main {
 	height: 100vh;
 	z-index: -1;
 	pointer-events: none;
-	opacity: 0;
+	opacity: 1;
 	&.loaded { opacity: 1; }
 
 	.img-wrapper {
@@ -342,7 +342,7 @@ main {
 	padding: var(--sp-48) var(--sp-24);
 	column-gap: var(--sp-24);
 	align-items: center;
-	opacity: 0;
+	opacity: 1;
 	&.loaded { opacity: 1; }
 
 	&[data-view="list"] {
@@ -511,7 +511,7 @@ main {
 }
 
 #products {
-    padding: var(--sp-60) var(--sp-24) 0;
+    padding: 0 var(--sp-24);
 	opacity: 0;
 
 	&.loaded { opacity: 1; }
@@ -523,6 +523,10 @@ main {
             column-gap: var(--sp-6);
             row-gap: var(--sp-80);
 			align-items: start;
+
+			 @media (width <= #{$lg}) {
+				padding: 0 var(--sp-12);
+			}
         }
 
         &[data-view="list"] {
@@ -533,9 +537,6 @@ main {
                 display: flex;
                 flex-direction: column;
 				
-                @media (width <= #{$lg}) {
-                    padding: 0 var(--sp-12);
-                }
                 @media (width <= #{$lg}) {
                     display: none;
                 }

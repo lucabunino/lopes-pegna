@@ -16,16 +16,10 @@
             const swiperParams = {
                 direction: 'vertical',
                 slidesPerView: 'auto',
-                centeredSlides: true,
-                // freeMode: {
-                //     enabled: true,
-                //     sticky: true,
-                // },
-                mousewheel: {
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    thresholdDelta: 10, 
-                },
+                centeredSlides: false,
+                centeredSlidesBounds: true,
+                cssMode: true,
+                mousewheel: true,
                 on: {
                     slideChange: (s) => {
                         hoveredProduct = processedProducts[s.activeIndex];
@@ -72,10 +66,11 @@
     .list-mobile {
         display: block;
         position: relative;
-        height: var(--sp-60);
+        height: calc(100vh - 60vh);
         margin-top: 0;
         padding: 0 var(--sp-12);
 		background-color: var(--white);
+        overflow: hidden;
 
         &::before, &::after {
             content: '';
@@ -106,13 +101,15 @@
                 &:global(.swiper-slide-active) {
                     color: var(--black);
                 }
+                &:global(:last-of-type) {
+                    margin-bottom: calc(100% - var(--sp-60));
+                }
 
                 .product {
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: var(--sp-24) 0;
                     column-gap: var(--sp-12);
 
                     .title {
