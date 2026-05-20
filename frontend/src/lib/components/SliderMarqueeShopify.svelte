@@ -114,7 +114,6 @@
     >
         {#each [...slides, ...slides] as slide}
             <div class="marquee-item" ondragstart={(e) => e.preventDefault()}>
-                <!-- <Media media={slide} cover={false} className={'sliderMarquee'} loading={'eager'}/> -->
 				<ImageShopify image={slide} className="sliderMarqueeShopify"/>
             </div>
         {/each}

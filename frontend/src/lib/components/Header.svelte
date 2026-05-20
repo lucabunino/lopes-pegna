@@ -96,8 +96,8 @@
 		</button>
 		<a href="/" class="logo-mobile menu-item" aria-label="Logo"
 		onclick={() => {menuer.setOpen(false);}}
-		onmouseenter={(e) => {if (e.type == "click") hoverLogo = true}}
-		onmouseleave={(e) => {if (e.type == "click") hoverLogo = false}}
+		onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
+		onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
 		>
 			<LogoSvg {hoverLogo}/>
 		</a>
@@ -109,8 +109,8 @@
 			</div>
         	<a href="/" class="logo menu-item" aria-label="Logo"
 			onclick={() => {menuer.setOpen(false);}}
-			onmouseenter={(e) => {if (e.type == "click") hoverLogo = true}}
-			onmouseleave={(e) => {if (e.type == "click") hoverLogo = false}}
+			onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
+			onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
 			>
 				<LogoSvg {hoverLogo}/>
 			</a>

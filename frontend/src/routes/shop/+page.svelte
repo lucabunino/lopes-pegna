@@ -224,7 +224,7 @@
 								class="product" 
 								class:active={hoveredProduct?.id === product.id}
 								href="/shop/{product.handle}" 
-								onmouseenter={(e) => {if (e.type == "click") hoveredProduct = product}}
+								onpointerenter={(e) => {if (e.pointerType === "mouse") hoveredProduct = product}}
 							>
 								<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
 								<p class="info in-15 in-13-mb uppercase">
