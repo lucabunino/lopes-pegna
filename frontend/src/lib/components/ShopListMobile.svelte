@@ -16,11 +16,11 @@
             const swiperParams = {
                 direction: 'vertical',
                 slidesPerView: 'auto',
-                centeredSlides: false,
-                freeMode: {
-                    enabled: true,
-                    sticky: true,
-                },
+                centeredSlides: true,
+                // freeMode: {
+                //     enabled: true,
+                //     sticky: true,
+                // },
                 mousewheel: {
                     forceToAxis: true,
                     sensitivity: 1,
@@ -72,11 +72,10 @@
     .list-mobile {
         display: block;
         position: relative;
-        height: calc(100vh - 60vh);
+        height: var(--sp-60);
         margin-top: 0;
         padding: 0 var(--sp-12);
-        background-color: var(--white);
-        z-index: 10;
+		background-color: var(--white);
 
         &::before, &::after {
             content: '';
@@ -93,6 +92,10 @@
 
         swiper-container {
             height: 100%;
+
+			&::part(container) {
+				overflow: visible;
+			}
             
             swiper-slide {
                 display: flex;
@@ -102,9 +105,6 @@
 
                 &:global(.swiper-slide-active) {
                     color: var(--black);
-                }
-                &:global(:last-of-type) {
-                    margin-bottom: calc(100% - var(--sp-60)*3);
                 }
 
                 .product {
