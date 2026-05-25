@@ -2,10 +2,12 @@ import { getShop } from '$lib/utils/sanity';
 import { shopifyFetch, FETCH_PRODUCTS_PAGE, GET_ALL_PRODUCTS } from '$lib/utils/shopify';
 import { getLocale } from '$lib/paraglide/runtime';
 import { error } from '@sveltejs/kit';
+import { m } from '$lib/paraglide/messages.js';
 
-export async function load({ getClientAddress, params }) {
+export async function load({ getClientAddress, params, cookies }) {
     const lang = params.lang ?? getLocale();
-	const buyerIP = getClientAddress();    
+	const buyerIP = getClientAddress();
+    const country = cookies.get('selected_country') ?? cookies.get('detected_country') ?? 'IT';
     try {
         const shop = await getShop(lang);
         if (!shop) throw error(404, 'Shop content not found');
@@ -15,6 +17,7 @@ export async function load({ getClientAddress, params }) {
             query: FETCH_PRODUCTS_PAGE, 
             variables: { first: 20 },
             lang,
+            country,
             buyerIP,
         });
 
@@ -23,6 +26,7 @@ export async function load({ getClientAddress, params }) {
             query: GET_ALL_PRODUCTS,
             variables: {},
             lang,
+            country,
             buyerIP
         });
 
@@ -51,6 +55,11 @@ export async function load({ getClientAddress, params }) {
             pageInfo: shopifyData?.products?.pageInfo,
             categories,
 			localization: shopifyData?.localization,
+            seoSingle: {
+                seoTitle: m.shop(),
+                seoDescription: shopifyData?.shop?.description,
+                seoImage: shop?.heroMedia?.image || shop?.heroMedia?.poster
+            }
         };
     } catch (err) {
         console.error('Data Sync Error:', err);

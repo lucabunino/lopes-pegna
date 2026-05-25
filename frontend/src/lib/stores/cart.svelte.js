@@ -60,14 +60,56 @@ export const cartStore = {
         await fetchCart();
     },
 
-    async addItem(variantId) {
+    async addItem(variantId, components = []) {
+        const lang = getLocale();
+        const { m } = await import('$lib/paraglide/messages.js');
+
+        if (cart?.lines?.nodes?.length > 0) {
+            // 1. Check if incoming item (if single) is already part of a set in the cart
+            const incomingIsComponentOfCartSet = cart.lines.nodes.some(line => 
+                line.merchandise.components?.nodes?.some(c => c.productVariant.id === variantId)
+            );
+
+            if (incomingIsComponentOfCartSet) {
+                alert(m.alert_item_in_cart_set());
+                return;
+            }
+
+            // 2. Check if incoming item (if set) contains an item already in the cart
+            if (components && components.length > 0) {
+                const incomingSetContainsCartItem = cart.lines.nodes.some(line => 
+                    components.some(c => c.productVariant.id === line.merchandise.id)
+                );
+
+                if (incomingSetContainsCartItem) {
+                    alert(m.alert_set_contains_cart_item());
+                    return;
+                }
+
+                // 3. Check if incoming item (if set) overlaps with a set already in the cart
+                const incomingSetOverlapsWithCartSet = cart.lines.nodes.some(line => {
+                    const cartSetComponents = line.merchandise.components?.nodes || [];
+                    if (cartSetComponents.length > 0) {
+                        return components.some(incomingComp => 
+                            cartSetComponents.some(cartComp => incomingComp.productVariant.id === cartComp.productVariant.id)
+                        );
+                    }
+                    return false;
+                });
+
+                if (incomingSetOverlapsWithCartSet) {
+                    alert(m.alert_set_contained_in_cart_set());
+                    return;
+                }
+            }
+        }
+
         const cartId = localStorage.getItem(CART_ID_STORAGE_KEY);
         if (!cartId) {
             await createCart(variantId);
             return;
         }
 
-        const lang = getLocale();
         const data = await shopifyFetch({
             query: CART_LINES_ADD_MUTATION,
             variables: {

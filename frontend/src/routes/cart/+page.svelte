@@ -5,7 +5,7 @@
     import { PortableText } from '@portabletext/svelte';
     import PortableTextStylePlain from '$lib/components/portableTextStyles/PortableTextStylePlain.svelte';
     import { m } from '$lib/paraglide/messages.js';
-    import { getLocale } from '$lib/paraglide/runtime';
+    import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
@@ -24,13 +24,13 @@
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/cart">{m.cart()}</a></li>
+		<li><a href={localizeHref(`/cart`)}>{m.cart()}</a></li>
 	</ol>
 </nav>
 <main id="cart-page" class="in-14">
 	<div class="cart-header uppercase">
         <h1 class="uppercase">{m.cart()}</h1>
-		<a class="btn-shop" href="/shop">{m.shop()} →</a>
+		<a class="btn-shop" href={localizeHref(`/shop`)}>{m.shop()} →</a>
 	</div>
 	<CartContent />
 </main>

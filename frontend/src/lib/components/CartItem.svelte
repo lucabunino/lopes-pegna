@@ -1,6 +1,7 @@
 <script>
     // imports
     import { m } from '$lib/paraglide/messages.js';
+    import { localizeHref } from '$lib/paraglide/runtime';
     import { formatPrice } from '$lib/utils/price';
     import ImageShopify from './ImageShopify.svelte';
 
@@ -12,14 +13,14 @@
 
 <li class="cart-item in-13 uppercase">
     {#if line.merchandise.image}
-        <a href={`/shop/${line.merchandise.product.handle}`}>
+        <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)}>
 			<ImageShopify image={line.merchandise.image} />
         </a>
     {/if}
     <div class="item-info">
         <div class="item-content">
             <h4 class="wo-24 uppercase">
-                <a href={`/shop/${line.merchandise.product.handle}`}>{line.merchandise.product.title}</a>
+                <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)}>{line.merchandise.product.title}</a>
             </h4>
             {#if line.merchandise.product.collections?.nodes?.length > 0}
                 <span class="collection">{line.merchandise.product.collections.nodes[0].singular?.value || line.merchandise.product.collections.nodes[0].title}</span>

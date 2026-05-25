@@ -163,6 +163,9 @@ export default {
                 {
                     type: 'reference',
                     to: [{ type: 'product' }],
+                    options: {
+                        filter: 'store.productType == "Set"'
+                    }
                 }
             ],
             validation: Rule => Rule.unique().max(6)

@@ -9,6 +9,7 @@
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
     import { innerWidth } from 'svelte/reactivity/window';
+    import { localizeHref } from '$lib/paraglide/runtime.js';
 
     // functions
     let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(true); menuer.setSmall(false);
@@ -23,7 +24,7 @@
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/about">{m.about()}</a></li>
+		<li><a href={localizeHref(`/about`)}>{m.about()}</a></li>
 	</ol>
 </nav>
 <main>

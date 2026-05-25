@@ -82,7 +82,6 @@
 .uppercase		{
 	text-transform: uppercase;
 	font-feature-settings: "lnum" 1, "case" 1;
-
 	&-mb {
 		@media (width <= #{$lg}) {
 			text-transform: uppercase;
@@ -90,9 +89,16 @@
 		}
 	}
 }
+.numbercase		{
+	font-feature-settings: "lnum" 1, "case" 1;
+	&-mb {
+		@media (width <= #{$lg}) {
+			font-feature-settings: "lnum" 1, "case" 1;
+		}
+	}
+}
 .normalcase		{
 	text-transform: none;
-
 	&-mb {
 		@media (width <= #{$lg}) {
 			text-transform: none;

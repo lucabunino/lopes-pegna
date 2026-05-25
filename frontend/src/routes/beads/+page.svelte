@@ -8,6 +8,7 @@
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
+    import { localizeHref } from '$lib/paraglide/runtime.js';
 
     // functions
     let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(false); menuer.setSmall(false);
@@ -16,7 +17,7 @@
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/beads">{m.beads()}</a></li>
+		<li><a href={localizeHref(`/beads`)}>{m.beads()}</a></li>
 	</ol>
 </nav>
 <main>

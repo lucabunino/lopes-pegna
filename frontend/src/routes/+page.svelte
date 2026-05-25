@@ -11,8 +11,7 @@
     import SliderProductsMobile from '$lib/components/SliderProductsMobile.svelte';
     import SliderSets from '$lib/components/SliderSets.svelte';
     import { m } from '$lib/paraglide/messages';
-    import { getLocale } from '$lib/paraglide/runtime';
-    import { collectionSlugMap } from '$lib/collectionSlugs';
+    import { getLocale, localizeHref } from '$lib/paraglide/runtime';
     import bp from '$lib/scss/breakpoints.module.scss';
     
 	// stores
@@ -25,11 +24,7 @@
     let scrollY = $state(0);
     let products = $state(undefined);
     let DURATION = $derived(innerWidth.current > 768 ? 200 : 0)
-    let activeCategory = $derived.by(() => {
-        const slug = page.url.searchParams.get('category') || 'all';
-        if (slug === 'all') return 'all';
-        return collectionSlugMap[currentLocale]?.[slug] || slug;
-    });
+    let activeCategory = $derived(page.url.searchParams.get('category') || 'all');
     let activeSort = $derived(page.url.searchParams.get('sort') || 'new-asc');
     let activeView = $derived(page.url.searchParams.get('view') || 'grid');
     let initialCols = $derived(innerWidth.current <= 1080 ? 2 : innerWidth.current <= 1440 ? 3 : innerWidth.current <= 1700 ? 4 : 5);
@@ -89,7 +84,7 @@
 		<section id="products" bind:this={products}>
 			{#if data.homepage.productsText}
 				<h3 class="wo-24 section-title">{data.homepage.productsText}</h3>
-				<a class="cta btn-s in-13 uppercase" href="/shop">{m.wear_me()} →</a>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.wear_me()} →</a>
 			{/if}
 			<div class="products desktop">
 				{#each data.homepage.products as product, i}
@@ -108,7 +103,7 @@
 			{/if}
 			{#if data.homepage.aboutText1}
 				<h3 class="wo-36 section-title">{data.homepage.aboutText1}</h3>
-				<a class="cta btn-s in-13 uppercase" href="/about">{m.about_lopes_pegna()} →</a>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/about`)}>{m.about_lopes_pegna()} →</a>
 			{/if}
 			{#if data.homepage.aboutText2}<h4 class="wo-24 wo-18-mb">{data.homepage.aboutText2}</h4>{/if}
 			{#if data.homepage.aboutSlider2}
@@ -129,7 +124,7 @@
 				{/if}
 				{#if data.homepage.setsProducts}
 					<div class="sets">
-						<a class="cta btn-s in-13 uppercase" href="/shop?category=set">{m.see_all()} →</a>
+						<a class="cta btn-s in-13 uppercase" href={localizeHref("/shop?category=set")}>{m.see_all()} →</a>
 						{#if innerWidth.current > parseInt(bp.lg)}
 							<SliderSets products={data.homepage.setsProducts} cover={true}/>
 						{/if}
@@ -145,7 +140,7 @@
 		<section id="beads">
 			{#if data.homepage.beadsText}
 				<h3 class="wo-36 section-title">{data.homepage.beadsText}</h3>
-				<a class="cta btn-s in-13 uppercase" href="/beads">{m.discover_more()} →</a>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref("/beads")}>{m.discover_more()} →</a>
 			{/if}
 			{#if data.homepage.beadsImages}
 				<div class="images">

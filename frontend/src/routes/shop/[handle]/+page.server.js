@@ -1,4 +1,4 @@
-import { shopifyFetch, GET_PRODUCT_BY_HANDLE, GET_RELATED_PRODUCTS } from '$lib/utils/shopify';
+import { shopifyFetch, GET_PRODUCT_BY_HANDLE, GET_RELATED_PRODUCTS, GET_BUNDLES } from '$lib/utils/shopify';
 import { getInfoEmail, getShop } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
 import { error } from '@sveltejs/kit';
@@ -9,7 +9,7 @@ export async function load({ params, getClientAddress }) {
     const buyerIP = getClientAddress();
 
     try {
-        const [productData, relatedData, shop] = await Promise.all([
+        const [productData, relatedData, shop, bundlesData] = await Promise.all([
             shopifyFetch({
                 query: GET_PRODUCT_BY_HANDLE,
                 variables: { handle },
@@ -22,7 +22,13 @@ export async function load({ params, getClientAddress }) {
                 lang,
                 buyerIP,
             }),
-            getShop(lang)
+            getShop(lang),
+            shopifyFetch({
+                query: GET_BUNDLES,
+				variables: { handle },
+                lang,
+                buyerIP
+            })
         ]);
         
         const infoEmail = await getInfoEmail();
@@ -52,7 +58,7 @@ export async function load({ params, getClientAddress }) {
             }
         }
         
-        // 2. Fallback to best selling if still not enough
+        // Fallback to best selling if still not enough
         if (related.length < 4) {
             const fallbackCount = 4 - related.length;
             const bestSelling = relatedData?.products?.nodes || [];
@@ -60,11 +66,28 @@ export async function load({ params, getClientAddress }) {
             related = [...related, ...filteredBestSelling.slice(0, fallbackCount)];
         }
 
+        // Logic for parent bundles (which sets contain this product)
+        let partOfSets = [];
+        if (bundlesData?.products?.nodes?.length > 0 && productData.product.variants?.nodes?.length > 0) {
+            const currentVariantIds = productData.product.variants.nodes.map(v => v.id);
+            
+            partOfSets = bundlesData.products.nodes.filter(bundle => {
+                const bundleComponents = bundle.variants?.nodes[0]?.components?.nodes || [];
+                return bundleComponents.some(c => currentVariantIds.includes(c.productVariant.id));
+            });
+        }
+
         return {
             product: productData.product,
             related,
-			infoEmail: infoEmail.infoEmail,
-            shopPolicies: shop?.shopPolicies || []
+        	infoEmail: infoEmail.infoEmail,
+            shopPolicies: shop?.shopPolicies || [],
+            partOfSets,
+            seoSingle: {
+                seoTitle: productData.product.seo.title || productData.product.title,
+                seoDescription: productData.product.seo.description || productData.product.description,
+                seoImage: productData.product.images.nodes[0]
+            }
         };
     } catch (err) {
         throw error(500, 'Failed to load product data');

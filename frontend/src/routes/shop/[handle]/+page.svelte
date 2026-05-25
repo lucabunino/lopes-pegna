@@ -2,35 +2,40 @@
     // imports
     import ImageShopify from '$lib/components/ImageShopify.svelte';
     import ProductCard from '$lib/components/ProductCard.svelte';
+	import SliderHalf from '$lib/components/SliderHalf.svelte';
+    import SliderMarqueeShopify from '$lib/components/SliderMarqueeShopify.svelte';
     import SliderProductsMobile from '$lib/components/SliderProductsMobile.svelte';
+    import BundleItem from '$lib/components/BundleItem.svelte';
+    import Head from '$lib/components/Head.svelte';
+    import PortableTextStylePolicy from '$lib/components/portableTextStyles/PortableTextStylePolicy.svelte';
     import { m } from '$lib/paraglide/messages.js';
     import { formatPrice } from '$lib/utils/price.js';
     import { renderRichText } from '$lib/utils/shopify.js';
     import bp from '$lib/scss/breakpoints.module.scss';
     import { innerWidth } from 'svelte/reactivity/window';
 	import { PortableText } from '@portabletext/svelte';
-    import PortableTextStylePolicy from '$lib/components/portableTextStyles/PortableTextStylePolicy.svelte';
 
     // stores
     import { cartStore } from '$lib/stores/cart.svelte.js';
     import { getMenu } from '$lib/stores/menu.svelte.js';
-    import SliderHalf from '$lib/components/SliderHalf.svelte';
-    import SliderMarqueeShopify from '$lib/components/SliderMarqueeShopify.svelte';
+    import { localizeHref } from '$lib/paraglide/runtime.js';
 
     // functions
     let menuer = getMenu(); menuer.setDark(true); menuer.setDifference(true); menuer.setSmall(true);
     let { data } = $props();
-    const { product } = $derived(data);
+	$inspect(data)
+    let { product } = $derived(data);
+	$inspect(product)
     const keysObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_keys"));
     const valuesObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_values"));
     const keysList = $derived(keysObj ? JSON.parse(keysObj.value) : []);
     const valuesList = $derived(valuesObj ? JSON.parse(valuesObj.value) : []);
 </script>
 
-
+<Head />
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/shop">{m.shop()}</a></li> • <li><a href="/shop/{product.handle}">{product.title}</a></li>
+		<li><a href={localizeHref(`/shop`)}>{m.shop()}</a></li> • <li><a href={localizeHref(`/shop/${product.handle}`)}>{product.title}</a></li>
 	</ol>
 </nav>
 <main id="product-page">
@@ -49,26 +54,27 @@
 		{/if}
 		<div class="right">
 			<p class="breadcrumb in-14"><a href="/shop">{m.shop()}</a> • <a class="uppercase" href="/shop/{product.handle}">{product.title}</a></p>
-			<h1 class="title wo-36">
+			<h1 class="title wo-36 uppercase">
 				{#if product.collections?.nodes?.length > 0}
-					<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
+					<span class="collection normalcase">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
 				{/if}
 				{product.title}
 			</h1>
 			<p class="price in-18">
 				{#if product.availableForSale}
+                    {#if product.variants?.nodes[0]?.compareAtPrice}
+                        <span class="compare-at-price">{formatPrice(product.variants.nodes[0].compareAtPrice.amount, product.variants.nodes[0].compareAtPrice.currencyCode)}</span>
+                    {/if}
 					{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
 				{:else}
 					{m.sold_out()}
 				{/if}
 			</p>
-
 			{#if product.descriptionHtml}
 				<div class="description wo-16">
 					{@html product.descriptionHtml}
 				</div>
 			{/if}
-
 			{#if product.length || product.total_length || keysList.length > 0}
 				<div class="measurements metafields in-14">
 					<h3 class="metafields-title in-13 uppercase">{m.measurements()}</h3>
@@ -94,7 +100,6 @@
 					{/if}
 				</div>
 			{/if}
-
 			{#if product.details}
 				<div class="details metafields in-14">
 					<h3 class="metafields-title in-13 uppercase">{m.details()}</h3>
@@ -103,17 +108,30 @@
 					</div>
 				</div>
 			{/if}
+			{#if data.partOfSets?.length > 0}
+				<h3 class="bundle sets metafields metafields-title in-13 uppercase">{m.part_of_set()} {#each data.partOfSets as parentSet}<a class="tag" href={localizeHref(`/shop/${parentSet.handle}`)}>{parentSet.title}</a>{/each}</h3>
+			{/if}
 			{#if product.variants.nodes.length > 0 && product.availableForSale}
 				<div class="btns">
 					<button 
 						class="cart btn-m in-15 uppercase" 
-						onclick={() => cartStore.addItem(product.variants.nodes[0].id)}
+						onclick={() => cartStore.addItem(product.variants.nodes[0].id, product.variants.nodes[0]?.components?.nodes)}
 					>
 						{m.add_to_cart()}
 					</button>
 					{#if data.infoEmail}
 						<a class="info btn-s in-15 uppercase" href="mailto:{data.infoEmail}?subject={product.title} – {m.info_request()}">{m.ask_informations()}</a>
 					{/if}
+				</div>
+			{/if}
+			{#if product.variants.nodes[0]?.components?.nodes?.length > 0}
+				<div class="bundle metafields in-14">
+					<h3 class="metafields-title in-13 uppercase">{m.set_contains()}</h3>
+					<div class="products">
+						{#each product.variants.nodes[0].components.nodes as component}
+							<BundleItem product={component.productVariant} />
+						{/each}
+					</div>
 				</div>
 			{/if}
 			{#if data.shopPolicies?.length > 0}
@@ -150,7 +168,7 @@
 	</section>
 	<section id="related">
 		<h4 class="section-title wo-24">{m.you_may_like()}</h4>
-		<a class="cta btn-s in-13 uppercase" href="/shop">{m.see_all()} →</a>
+		<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.see_all()} →</a>
 		{#if data.related}
 			<div class="related">
 				{#each data.related as relatedProduct}
@@ -200,6 +218,13 @@
 
 				.price {
 					margin-top: var(--sp-10);
+                    display: flex;
+                    column-gap: var(--sp-10);
+
+                    .compare-at-price {
+                        text-decoration: line-through;
+                        color: var(--darkGray);
+                    }
 				}
 
 				.description {
@@ -210,7 +235,7 @@
 					margin-top: var(--sp-40);
 
 					&+.metafields {
-						margin-top: var(--sp-30);
+						margin-top: var(--sp-24);
 					}
 
 					.metafields-title {
@@ -226,8 +251,42 @@
 					}
 				}
 
+				.bundle {
+					width: 100%;
+					
+					&.sets {
+						display: inline-flex;
+						column-gap: .3em;
+						
+						.tag {
+							margin-top: -0.3em;
+							&:hover {
+								background-color: var(--black);
+							}
+						}
+					}
+
+					.products {
+						margin-top: var(--sp-14);
+						width: 100%;
+						display: flex;
+						flex-wrap: wrap;
+						column-gap: var(--sp-24);
+					}
+				}
+
+				.btns {
+					display: flex;
+					flex-wrap: wrap;
+					align-items: baseline;
+					column-gap: var(--sp-24);
+					row-gap: var(--sp-12);
+					margin-top: var(--sp-40);
+				}
+
 				.policies {
 					margin-top: var(--sp-60);
+
 					.accordion {
 						border-top: 1px solid var(--black);
 						
@@ -257,18 +316,9 @@
 						}
 
 						.content {
-							padding-bottom: var(--sp-24);
+							padding: var(--sp-12) 0 var(--sp-24);
 						}
 					}
-				}
-
-				.btns {
-					display: flex;
-					flex-wrap: wrap;
-					align-items: baseline;
-					column-gap: var(--sp-24);
-					row-gap: var(--sp-12);
-					margin-top: var(--sp-40);
 				}
 			}
 

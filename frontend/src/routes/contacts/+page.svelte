@@ -9,6 +9,7 @@
 
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
+    import { localizeHref } from '$lib/paraglide/runtime.js';
 
     // functions
     let { data } = $props();
@@ -17,7 +18,7 @@
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/contacts">{m.contacts()}</a></li>
+		<li><a  href={localizeHref(`/contacts`)}>{m.contacts()}</a></li>
 	</ol>
 </nav>
 <main class="wo-24 wo-15-mb">

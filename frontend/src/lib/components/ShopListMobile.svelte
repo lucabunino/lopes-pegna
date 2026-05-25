@@ -39,7 +39,7 @@
                 <a 
                     class="product" 
                     class:active={hoveredProduct?.id === product.id}
-                    href="/shop/{product.handle}"
+					href={localizeHref(`/shop/${product.handle}`)}
                 >
                     <p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
                     <p class="info in-15 in-13-mb uppercase">

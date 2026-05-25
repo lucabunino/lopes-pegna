@@ -143,6 +143,13 @@ pre {
 		}
 	}
 }
+.tag,
+.tag:any-link {
+	color: var(--white);
+	background-color: var(--darkGray);
+	padding: .3em .7em .25em;
+	border-radius: .2em;
+}
 
 // General
 .cover {

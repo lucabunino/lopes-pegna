@@ -40,17 +40,22 @@
         margin: 1.1em 0 1.1em 2em;
 		list-style: disc;
     }
+	:global(.portableText.content > h2:first-child),
+	:global(.portableText.content > h3:first-child),
+	:global(.portableText.content > h4:first-child) {
+		margin-top: 0;
+    }
 	a {
 		display: inline;
 		text-decoration: underline;
 	}
 	h2 {
-		margin-top: 3em;
+		margin-top: 2em;
 		margin-bottom: .5em;
 		text-transform: uppercase;
 	}
 	h3 {
-		margin-top: 3em;
+		margin-top: 2em;
 		margin-bottom: .5em;
 		text-transform: uppercase;
 	}

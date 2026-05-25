@@ -9,8 +9,7 @@
     import ProductCard from '$lib/components/ProductCard.svelte';
     import ImageShopify from '$lib/components/ImageShopify.svelte';
     import { m } from '$lib/paraglide/messages.js';
-    import { getLocale } from '$lib/paraglide/runtime';
-    import { collectionSlugMap } from '$lib/collectionSlugs';
+    import { getLocale, localizeHref } from '$lib/paraglide/runtime';
     import { formatPrice } from '$lib/utils/price';
     import bp from '$lib/scss/breakpoints.module.scss';
     import ShopListMobile from '$lib/components/ShopListMobile.svelte';
@@ -31,11 +30,7 @@
     let isLoading = $state(false);
     let DURATION = $derived(innerWidth.current > 768 ? 200 : 0);
     
-    let activeCategory = $derived.by(() => {
-        const slug = page.url.searchParams.get('category') || 'all';
-        if (slug === 'all') return 'all';
-        return collectionSlugMap[currentLocale]?.[slug] || slug;
-    });
+    let activeCategory = $derived(page.url.searchParams.get('category') || 'all');
     
     let productsContainer = $state();
     let loaderElement = $state(); 
@@ -103,7 +98,7 @@
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
-		<li><a href="/shop">{m.shop()}</a></li> • <li><a href="/shop?view={activeView}">{activeView === 'list' ? m.list() : m.grid()}</a></li>
+		<li><a href={localizeHref("/shop")}>{m.shop()}</a></li> • <li><a href={localizeHref(`/shop?view=${activeView}`)}>{activeView === 'list' ? m.list() : m.grid()}</a></li>
 	</ol>
 </nav>
 <main>
@@ -137,11 +132,10 @@
 					{m.all()}
 				</button>
 				{#each data.categories as category}
-					{@const slug = collectionSlugMap[currentLocale] ? Object.keys(collectionSlugMap[currentLocale]).find(key => collectionSlugMap[currentLocale][key] === category.slug) || category.slug : category.slug}
 					<button class="category btn-shop btn-s" 
-						class:active={page.url.searchParams.get('category') === slug} 
-						aria-pressed={page.url.searchParams.get('category') === slug}
-						onclick={() => updateParams({ category: slug })}
+						class:active={activeCategory === category.slug} 
+						aria-pressed={activeCategory === category.slug}
+						onclick={() => updateParams({ category: category.slug })}
 					>
 						{category.label}
 					</button>
@@ -153,8 +147,7 @@
 				>
 					<option value='all'>{m.all()}</option>
 					{#each data.categories as category}
-						{@const slug = collectionSlugMap[currentLocale] ? Object.keys(collectionSlugMap[currentLocale]).find(key => collectionSlugMap[currentLocale][key] === category.slug) || category.slug : category.slug}
-						<option value={slug}>{category.label}</option>
+						<option value={category.slug}>{category.label}</option>
 					{/each}
 				</select>
 			</div>
@@ -223,7 +216,7 @@
 							<a 
 								class="product" 
 								class:active={hoveredProduct?.id === product.id}
-								href="/shop/{product.handle}" 
+								href={localizeHref(`/shop/${product.handle}`)}
 								onpointerenter={(e) => {if (e.pointerType === "mouse") hoveredProduct = product}}
 							>
 								<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>

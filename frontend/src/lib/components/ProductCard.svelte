@@ -3,7 +3,7 @@
     // imports
     import ImageShopify from "./ImageShopify.svelte";
     import { m } from "$lib/paraglide/messages";
-    import { getLocale } from "$lib/paraglide/runtime";
+    import { getLocale, localizeHref } from "$lib/paraglide/runtime";
     import { formatPrice } from "$lib/utils/price";
 
     // stores
@@ -13,7 +13,7 @@
     let { product } = $props();
 </script>
 
-<a class="product" href="/shop/{product.handle}">
+<a class="product" href={localizeHref(`/shop/${product.handle}`)}>
 	<div class="img-wrapper">
 		{#if product.images.nodes[0]}
 			<ImageShopify image={product.images.nodes[0]} />
@@ -28,10 +28,13 @@
             aria-label="Add {product.title} to cart"
             onclick={(e) => {
                 e.preventDefault();
-                const variantId = product.variants?.nodes[0]?.id;
-                if (variantId) cartStore.addItem(variantId);
+                const variant = product.variants?.nodes[0];
+                if (variant?.id) cartStore.addItem(variant.id, variant.components?.nodes);
             }}
         ></button>
+		{#if product.collections?.nodes[0].handle === "set"}
+			<span class="set tag in-13">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
+		{/if}
 	</div>
 	<div class="info">
 		<h4 class="title wo-24 uppercase">{product.title}</h4>
@@ -41,6 +44,9 @@
 			{/if}
 			<p class="price">
 				{#if product.availableForSale}
+                    {#if product.variants?.nodes[0]?.compareAtPrice}
+                        <span class="compare-at-price">{formatPrice(product.variants.nodes[0].compareAtPrice.amount, product.variants.nodes[0].compareAtPrice.currencyCode)}</span>
+                    {/if}
 					{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
                 {:else}
                     {m.sold_out()}
@@ -88,6 +94,12 @@
 				position: absolute;
 				inset: 0;
 				opacity: 0;
+			}
+
+			.set {
+				position: absolute;
+                top: var(--sp-16);
+                left: var(--sp-9);
 			}
 
             .add-to-cart {
@@ -143,6 +155,16 @@
 				display: flex;
 				flex-direction: column;
 				margin-top: var(--sp-2);
+
+                .price {
+                    display: flex;
+                    column-gap: var(--sp-6);
+
+                    .compare-at-price {
+                        text-decoration: line-through;
+                        color: var(--darkGray);
+                    }
+                }
 			}
 
 			@media (width <= #{$xxs}) {

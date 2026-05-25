@@ -14,7 +14,11 @@
     const rawDesc = $derived(seoSingle?.seoDescription || seoBase?.seoDescription || "");
     const displayDesc = $derived(rawDesc.length > 157 ? rawDesc.slice(0, 157) + "..." : rawDesc);
     const seoImgObj = $derived(seoSingle?.seoImage || seoBase?.seoImage);
-    const socialImageUrl = $derived(seoImgObj ? urlFor(seoImgObj).width(1200).height(630).fit('crop').quality(70).format('jpg').url() : undefined);
+    const socialImageUrl = $derived.by(() => {
+        if (!seoImgObj) return undefined;
+        if (seoImgObj.url) return seoImgObj.url;
+        return urlFor(seoImgObj)?.width(1200)?.height(630)?.fit('crop')?.quality(70)?.format('jpg')?.url();
+    });
 </script>
 
 <svelte:head>

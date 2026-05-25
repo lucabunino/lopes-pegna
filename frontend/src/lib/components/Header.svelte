@@ -94,7 +94,7 @@
 				<div class="line"></div>
 			</div>
 		</button>
-		<a href="/" class="logo-mobile menu-item" aria-label="Logo"
+		<a href={localizeHref("/")} class="logo-mobile menu-item" aria-label="Logo"
 		onclick={() => {menuer.setOpen(false);}}
 		onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
 		onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
@@ -103,11 +103,11 @@
 		</a>
 		<ul id="main-menu" class="menu {menuer.open ? 'open' : 'closed'}">
 			<div class="menu-left">
-				<li class="shop"><a class="menu-item btn-s" aria-current={page.route.id === '/shop' ? 'page' : undefined} href="/shop" onclick={() => {menuer.setOpen(false)}}>{m.shop()}</a></li>
-				<li class="about"><a class="menu-item btn-s" aria-current={page.route.id === '/about' ? 'page' : undefined} href="/about" onclick={() => {menuer.setOpen(false)}}>{m.about()}</a></li>
-				<li class="beads"><a class="menu-item btn-s" aria-current={page.route.id === '/beads' ? 'page' : undefined} href="/beads" onclick={() => {menuer.setOpen(false)}}>{m.beads()}</a></li>
+				<li class="shop"><a class="menu-item btn-s" aria-current={page.route.id === '/shop' ? 'page' : undefined} href={localizeHref("/shop")} onclick={() => {menuer.setOpen(false)}}>{m.shop()}</a></li>
+				<li class="about"><a class="menu-item btn-s" aria-current={page.route.id === '/about' ? 'page' : undefined} href={localizeHref("/about")} onclick={() => {menuer.setOpen(false)}}>{m.about()}</a></li>
+				<li class="beads"><a class="menu-item btn-s" aria-current={page.route.id === '/beads' ? 'page' : undefined} href={localizeHref("/beads")} onclick={() => {menuer.setOpen(false)}}>{m.beads()}</a></li>
 			</div>
-        	<a href="/" class="logo menu-item" aria-label="Logo"
+        	<a href={localizeHref("/")} class="logo menu-item" aria-label="Logo"
 			onclick={() => {menuer.setOpen(false);}}
 			onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
 			onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
@@ -115,7 +115,7 @@
 				<LogoSvg {hoverLogo}/>
 			</a>
 			<div class="menu-right">
-				<li class="contacts"><a class="menu-item btn-s" aria-current={page.url.pathname.startsWith('/contacts') ? 'page' : undefined} href="/contacts" onclick={() => {menuer.setOpen(false)}}>{m.contacts()}</a></li>
+				<li class="contacts"><a class="menu-item btn-s" aria-current={page.url.pathname.startsWith('/contacts') ? 'page' : undefined} href={localizeHref("/contacts")} onclick={() => {menuer.setOpen(false)}}>{m.contacts()}</a></li>
 				<li class="cart">
 					<button 
 						class="menu-item btn-s in-13 uppercase in-24-mb normalcase-mb" 

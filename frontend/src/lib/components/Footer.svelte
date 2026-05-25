@@ -18,8 +18,8 @@
 			<h4 class="in-12 uppercase">{m.shop()}</h4>
 			<nav>
 				<ul>
-					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/shop?category=set') ? 'page' : undefined} href="/shop?category=set">{m.sets()}</a></li>
-					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/shop') ? 'page' : undefined} href="/shop">{m.all_products()}</a></li>
+					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/shop?category=set') ? 'page' : undefined} href={localizeHref("/shop?category=set")}>{m.sets()}</a></li>
+					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/shop') ? 'page' : undefined} href={localizeHref("/shop")}>{m.all_products()}</a></li>
 				</ul>
 			</nav>
 		</div>
@@ -27,7 +27,7 @@
 			<h4 class="in-12 uppercase">{m.get_in_touch()}</h4>
 			<nav>
 				<ul>
-					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/contacts') ? 'page' : undefined} href="/contacts">{m.contacts()}</a></li>
+					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/contacts') ? 'page' : undefined} href={localizeHref("/contacts")}>{m.contacts()}</a></li>
 					{#if contacts.instagram}
 						<li><a href={contacts.instagram.instagramHref} target="_blank" rel="noopener noreferrer">Instagram</a></li>
 					{/if}
@@ -39,7 +39,7 @@
 			<nav>
 				<ul>
 					{#each policies as policy, i}
-						<li><a class="footer-item" aria-current={page.url.pathname.startsWith(`/policy/${policy.slug.current}`) ? 'page' : undefined} href="/policy/{policy.slug.current}">{policy.title}</a></li>
+						<li><a class="footer-item" aria-current={page.url.pathname.startsWith(`/policy/${policy.slug.current}`) ? 'page' : undefined} href={localizeHref(`/policy/${policy.slug.current}`)}>{policy.title}</a></li>
 					{/each}
 				</ul>
 			</nav>
@@ -48,8 +48,8 @@
 			<h4 class="in-12 uppercase">{m.about()}</h4>
 			<nav>
 				<ul>
-					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/about') ? 'page' : undefined} href="/about">{m.about_lopes_pegna()}</a></li>
-					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/beads') ? 'page' : undefined} href="/beads">{m.beads()}</a></li>
+					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/about') ? 'page' : undefined} href={localizeHref("/about")}>{m.about_lopes_pegna()}</a></li>
+					<li><a class="footer-item" aria-current={page.url.pathname.startsWith('/beads') ? 'page' : undefined} href={localizeHref("/beads")}>{m.beads()}</a></li>
 				</ul>
 			</nav>
 		</div>

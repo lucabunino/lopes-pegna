@@ -9,6 +9,29 @@ export default defineConfig({
 			project: './project.inlang',
 			outdir: './src/lib/paraglide',
 			strategy: ['url', 'cookie', 'baseLocale'],
+			urlPatterns: [
+				{
+					pattern: "/beads",
+					localized: [
+						["it", "/perle"],
+						["en", "/en/beads"],
+					],
+				},
+				{
+					pattern: "/contacts",
+					localized: [
+						["it", "/contatti"],
+						["en", "/en/contacts"],
+					],
+				},
+				{
+					pattern: "/:path(.*)?",
+					localized: [
+						["en", "/en/:path(.*)?"],
+						["it", "/:path(.*)?"],
+					],
+				},
+			],
 		})
 	]
 });
