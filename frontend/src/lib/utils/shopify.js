@@ -24,7 +24,7 @@ export async function shopifyFetch({ query, variables, lang = 'it', country = 'I
                 variables: {
                     ...variables,
                     language: lang.toUpperCase(),
-					country: "GB"
+					country: country.toUpperCase()
                 }
             })
         });

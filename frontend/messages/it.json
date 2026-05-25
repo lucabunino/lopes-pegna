@@ -58,7 +58,7 @@
 	"total_length": "Lunghezza totale",
 	"details": "Dettagli",
 	"set_contains": "Questo set contiene",
-	"part_of_set": "Parte di",
+	"part_of_set": "Fa parte di",
 	"alert_set_contains_cart_item": "Stai aggiungendo un set che contiene un prodotto già presente nel carrello.",
 	"alert_item_in_cart_set": "Stai aggiungendo un prodotto che è già incluso in un set presente nel tuo carrello.",
 	"alert_set_contained_in_cart_set": "Stai aggiungendo un set che ha prodotti in comune con un altro set presente nel tuo carrello.",

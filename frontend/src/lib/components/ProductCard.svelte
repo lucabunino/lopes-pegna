@@ -167,7 +167,7 @@
                 }
 			}
 
-			@media (width <= #{$xxs}) {
+			@media (width <= #{$xs}) {
 				flex-direction: column;
 
 				.title {

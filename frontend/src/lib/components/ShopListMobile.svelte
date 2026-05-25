@@ -5,6 +5,7 @@
     import { formatPrice } from '$lib/utils/price';
     import bp from '$lib/scss/breakpoints.module.scss';
     import { innerWidth } from 'svelte/reactivity/window';
+    import { localizeHref } from '$lib/paraglide/runtime';
 
     let { processedProducts, hoveredProduct = $bindable() } = $props();
     let swiperEl = $state();

@@ -9,6 +9,7 @@
 
     // functions
     let { line, removeItem } = $props();
+    $inspect(line.merchandise)
 </script>
 
 <li class="cart-item in-13 uppercase">
@@ -19,7 +20,7 @@
     {/if}
     <div class="item-info">
         <div class="item-content">
-            <h4 class="wo-24 uppercase">
+            <h4 class="wo-24 wo-18-mb uppercase">
                 <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)}>{line.merchandise.product.title}</a>
             </h4>
             {#if line.merchandise.product.collections?.nodes?.length > 0}
@@ -31,11 +32,16 @@
         </div>
     </div>
     <p class="price">
+        {#if line.merchandise.compareAtPrice && line.merchandise.compareAtPrice.amount > line.merchandise.price.amount}
+            <span class="compare-at-price">{formatPrice(line.merchandise.compareAtPrice.amount, line.merchandise.price.currencyCode)}</span>
+        {/if}
         {formatPrice(line.merchandise.price.amount, line.merchandise.price.currencyCode)}
     </p>
 </li>
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module' as *;
+
     .cart-item {
         display: grid;
         grid-template-columns: 100px 1fr auto;
@@ -44,6 +50,10 @@
 		border-bottom: solid 1px var(--lightGray);
 		padding-bottom: var(--sp-14);
         align-items: start;
+
+		@media (width <= #{$lg}) {
+			grid-template-columns: 60px 1fr auto;
+		}
 
 		&:last-of-type {
 			border-bottom: unset;
@@ -82,6 +92,14 @@
         .price {
 			padding: var(--sp-6) 0;
             white-space: nowrap;
+            display: flex;
+            column-gap: var(--sp-6);
+            justify-content: flex-end;
+
+            .compare-at-price {
+                text-decoration: line-through;
+                opacity: 0.4;
+            }
         }
     }
 </style>
