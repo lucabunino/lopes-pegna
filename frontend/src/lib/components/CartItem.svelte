@@ -9,7 +9,6 @@
 
     // functions
     let { line, removeItem } = $props();
-    $inspect(line.merchandise)
 </script>
 
 <li class="cart-item in-13 uppercase">
@@ -32,8 +31,8 @@
         </div>
     </div>
     <p class="price">
-        {#if line.merchandise.compareAtPrice && line.merchandise.compareAtPrice.amount > line.merchandise.price.amount}
-            <span class="compare-at-price">{formatPrice(line.merchandise.compareAtPrice.amount, line.merchandise.price.currencyCode)}</span>
+        {#if line.merchandise.compareAtPrice}
+            <span class="compare-at-price">{formatPrice(line.merchandise.compareAtPrice.amount, line.merchandise.compareAtPrice.currencyCode)}</span>
         {/if}
         {formatPrice(line.merchandise.price.amount, line.merchandise.price.currencyCode)}
     </p>

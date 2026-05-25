@@ -38,7 +38,7 @@
 			{#if price}
 				<span class="price">
 					{#if availableForSale}
-						{#if compareAtPrice && compareAtPrice.amount > price.amount}
+						{#if compareAtPrice}
 							<span class="compare-at-price">{formatPrice(compareAtPrice.amount, compareAtPrice.currencyCode)}</span>
 						{/if}
 						{formatPrice(price.amount, price.currencyCode)}
