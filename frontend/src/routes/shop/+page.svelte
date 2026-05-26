@@ -51,8 +51,8 @@
                 case 'price-desc': return b.priceRange.minVariantPrice.amount - a.priceRange.minVariantPrice.amount;
                 case 'number-asc': return (parseInt(a.title.replace(/\D/g, '')) || 0) - (parseInt(b.title.replace(/\D/g, '')) || 0);
                 case 'number-desc': return (parseInt(b.title.replace(/\D/g, '')) || 0) - (parseInt(a.title.replace(/\D/g, '')) || 0);
-                case 'new-asc': return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
-                case 'new-desc': return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+                case 'new-asc': return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+                case 'new-desc': return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
                 default: return 0;
             }
         });
@@ -114,6 +114,8 @@
 				<div class="img-wrapper" in:fade|global={{ duration: DURATION, delay: DURATION }} out:fade|global={{ duration: DURATION }}>
 					{#if hoveredProduct.listImage?.reference?.image}
 						<ImageShopify image={hoveredProduct.listImage.reference.image}/>
+					{:else if hoveredProduct.images.nodes[0]}
+						<ImageShopify image={hoveredProduct.images.nodes[0]} />
 					{/if}
 				</div>
 			{/key}
@@ -220,18 +222,21 @@
 								onpointerenter={(e) => {if (e.pointerType === "mouse") hoveredProduct = product}}
 							>
 								<p class="title wo-36 uppercase {product.availableForSale ? 'availableForSale' : 'soldOut'}">{product.title}</p>
-								<p class="info in-15 in-13-mb uppercase">
+								<div class="info in-15 in-13-mb uppercase">
 									{#if product.collections?.nodes?.length > 0}
-										<span class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</span>
+										<p class="collection">{product.collections.nodes[0].singular?.value || product.collections.nodes[0].title}</p>
 									{/if}
-									<span class="price">
+									<p class="price">
 										{#if product.availableForSale}
+											{#if product.variants?.nodes[0]?.compareAtPrice}
+												<span class="compare-at-price">{formatPrice(product.variants.nodes[0].compareAtPrice.amount, product.variants.nodes[0].compareAtPrice.currencyCode)}</span>
+											{/if}
 											{formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
 										{:else}
 											{m.sold_out()}
 										{/if}
-									</span>
-								</p>
+									</p>
+								</div>
 							</a>
 						{/each}
 					</div>
@@ -552,8 +557,19 @@ main {
                     .info {
                         display: flex;
                         flex-direction: column;
+						align-items: flex-end;
                         text-align: right;
                         opacity: 0;
+
+						.price {
+							display: flex;
+							column-gap: var(--sp-6);
+
+							.compare-at-price {
+								text-decoration: line-through;
+								color: var(--darkGray);
+							}
+						}
                     }
 
                     &.active {

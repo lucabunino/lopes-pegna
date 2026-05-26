@@ -33,10 +33,7 @@
         {@render children()}
     </a>
 {:else if style === 'h2'}
-    <h2>
-        <span class="wo-24 index"></span>
-        <span class="wo-36 content">{@render children()}</span>
-    </h2>
+    <h2 class="wo-36">{@render children()}</h2>
 {:else if style === 'normal'}
     <p>{@render children()}</p>
 {:else}
@@ -46,9 +43,9 @@
 <style lang="scss">
 @use '$lib/scss/breakpoints.module' as *;
 
-    :global(.portableText.content) {
-        counter-reset: h2-index;
-    }
+    // :global(.portableText.content) {
+    //     counter-reset: h2-index;
+    // }
 
     :global(.portableText.content p + p) {
         margin-top: 1.2em;
@@ -78,28 +75,10 @@
 		text-decoration: underline;
     }
 	h2 {
-		display: grid;
-		column-gap: var(--sp-6);
-		align-items: baseline;
-		grid-template-columns: repeat(2, 1fr);
-		grid-column: 1 / span 2;
-		counter-increment: h2-index;
+		display: block;
+		grid-column: 2 / span 1;
 		margin-top: var(--sp-140);
 		margin-bottom: var(--sp-40);
-
-		.index {
-			display: inline-block;
-			flex-shrink: 0;
-			grid-column: 1 / span 1;
-
-			&::before {
-				content: counter(h2-index);
-			}
-		}
-
-		.content {
-			display: inline-block;
-		}
 	}
 
 	@media (width <= #{$lg}) {
