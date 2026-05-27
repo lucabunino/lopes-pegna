@@ -23,7 +23,6 @@ export async function load({ getClientAddress, params }) {
                 buyerIP,
               }) 
             : { nodes: [] };
-		console.log('Shopify identified country:', shopifyData.localization.country.isoCode);
 		
         const shopifyMap = new Map(shopifyData?.nodes?.map(p => [p?.id, p]));
         homepage.products = featuredIds.map(gid => shopifyMap.get(gid)).filter(Boolean);

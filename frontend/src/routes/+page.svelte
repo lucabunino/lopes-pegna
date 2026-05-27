@@ -79,7 +79,7 @@
 			{/if}
 		</section>
 	{/if}
-	{#if data.homepage.products}
+	{#if data.homepage.products?.length > 0}
 		<!-- <pre>Shopping from: {data.localization.country.name}</pre> -->
 		<section id="products" bind:this={products}>
 			{#if data.homepage.productsText}
@@ -113,7 +113,7 @@
 			{/if}
 		</section>
 	{/if}
-	{#if data.homepage.setsMedia && data.homepage.setsText && data.homepage.setsProducts}
+	{#if data.homepage.setsMedia && data.homepage.setsText && data.homepage.setsProducts?.length > 0}
 		<section id="sets">
 			{#if data.homepage.setsMedia}
 				<Media media={data.homepage.setsMedia} cover={true} className={'setsMedia'} />
