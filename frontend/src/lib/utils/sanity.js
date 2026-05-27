@@ -65,7 +65,7 @@ export async function getCartInfo(lang) {
     return await client.fetch(
         `
         *[ _type == "shop" && !(_id in path('drafts.**'))][0] {
-            "cartInfo": cartInfo[language == $lang][0].value[0],
+            "cartInfo": cartInfo[language == $lang][0].value,
         }
         `,
         { lang }
