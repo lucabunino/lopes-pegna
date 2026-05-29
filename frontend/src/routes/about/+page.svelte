@@ -28,6 +28,7 @@
 	</ol>
 </nav>
 <main>
+	<h1 class="sr-only">{m.about()}</h1>
 	<section id="hero">
 		{#if data.about.heroMedia}
             {#each data.about.heroMedia as media}

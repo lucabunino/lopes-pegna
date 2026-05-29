@@ -27,20 +27,6 @@ export default {
 		},
 	},
 	{
-      name: 'kind',
-      title: 'Kind',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Cookies', value: 'cookies' },
-          { title: 'Privacy', value: 'privacy' },
-          { title: 'Terms', value: 'terms' },
-          { title: 'Other', value: 'other' },
-        ],
-        layout: 'radio'
-      }
-    },
-	{
 		name: 'inFooter',
 		type: 'boolean'
 	},

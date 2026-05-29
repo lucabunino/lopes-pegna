@@ -73,7 +73,7 @@
 			{/if}
 			{#if data.homepage.heroText}
 				<div class="heroText">
-					<h2 class="wo-36">{data.homepage.heroText}</h2>
+					<h1 class="wo-36">{data.homepage.heroText}</h1>
 					<button class="btn-s in-13 uppercase" onclick={() => {products.scrollIntoView({ behavior: "smooth" })}}>{m.discover_more()}</button>
 				</div>
 			{/if}
@@ -83,8 +83,8 @@
 		<!-- <pre>Shopping from: {data.localization.country.name}</pre> -->
 		<section id="products" bind:this={products}>
 			{#if data.homepage.productsText}
-				<h3 class="wo-24 section-title">{data.homepage.productsText}</h3>
-				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.wear_me()} →</a>
+				<h2 class="wo-24 section-title">{data.homepage.productsText}</h2>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.wear_me()} <span aria-hidden="true">→</span></a>
 			{/if}
 			<div class="products desktop">
 				{#each data.homepage.products as product, i}
@@ -102,10 +102,10 @@
 				<SliderMarquee slides={data.homepage.aboutSlider1} />
 			{/if}
 			{#if data.homepage.aboutText1}
-				<h3 class="wo-36 section-title">{data.homepage.aboutText1}</h3>
-				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/about`)}>{m.about_lopes_pegna()} →</a>
+				<h2 class="wo-36 section-title">{data.homepage.aboutText1}</h2>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref(`/about`)}>{m.about_lopes_pegna()} <span aria-hidden="true">→</span></a>
 			{/if}
-			{#if data.homepage.aboutText2}<h4 class="wo-24 wo-18-mb">{data.homepage.aboutText2}</h4>{/if}
+			{#if data.homepage.aboutText2}<h3 class="wo-24 wo-18-mb section-description">{data.homepage.aboutText2}</h3>{/if}
 			{#if data.homepage.aboutSlider2}
 				<div class="slider-wrapper">
 					<SliderHalf slides={data.homepage.aboutSlider2} />
@@ -120,11 +120,11 @@
 			{/if}
 			<div class="right">
 				{#if data.homepage.setsText}
-					<h3 class="wo-36 section-title">{data.homepage.setsText}</h3>
+					<h2 class="wo-36 section-title">{data.homepage.setsText}</h2>
 				{/if}
 				{#if data.homepage.setsProducts}
 					<div class="sets">
-						<a class="cta btn-s in-13 uppercase" href={localizeHref("/shop?category=set")}>{m.see_all()} →</a>
+						<a class="cta btn-s in-13 uppercase" href={localizeHref("/shop?category=set")}>{m.see_all()} <span aria-hidden="true">→</span></a>
 						{#if innerWidth.current > parseInt(bp.lg)}
 							<SliderSets products={data.homepage.setsProducts} cover={true}/>
 						{/if}
@@ -139,8 +139,8 @@
 	{#if data.homepage.beadsText && data.homepage.beadsImages}
 		<section id="beads">
 			{#if data.homepage.beadsText}
-				<h3 class="wo-36 section-title">{data.homepage.beadsText}</h3>
-				<a class="cta btn-s in-13 uppercase" href={localizeHref("/beads")}>{m.discover_more()} →</a>
+				<h2 class="wo-36 section-title">{data.homepage.beadsText}</h2>
+				<a class="cta btn-s in-13 uppercase" href={localizeHref("/beads")}>{m.discover_more()} <span aria-hidden="true">→</span></a>
 			{/if}
 			{#if data.homepage.beadsImages}
 				<div class="images">
@@ -258,7 +258,7 @@
 			text-align: right;
 			grid-column: span 4;
 		}
-		h4 {
+		.section-description {
 			padding: 0 var(--sp-24);
 			margin-top: var(--sp-30);
 			grid-column: span 12;
@@ -284,7 +284,7 @@
 				margin-left: var(--sp-12);
 				margin-top: var(--sp-36);
 			}
-			h4 {
+			.section-description {
 				padding: 0 var(--sp-12);
 				white-space: normal;
 				margin-top: var(--sp-6);

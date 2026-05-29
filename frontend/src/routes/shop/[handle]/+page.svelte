@@ -6,7 +6,6 @@
     import SliderMarqueeShopify from '$lib/components/SliderMarqueeShopify.svelte';
     import SliderProductsMobile from '$lib/components/SliderProductsMobile.svelte';
     import BundleItem from '$lib/components/BundleItem.svelte';
-    import Head from '$lib/components/Head.svelte';
     import PortableTextStylePolicy from '$lib/components/portableTextStyles/PortableTextStylePolicy.svelte';
     import { m } from '$lib/paraglide/messages.js';
     import { formatPrice } from '$lib/utils/price.js';
@@ -23,16 +22,17 @@
     // functions
     let menuer = getMenu(); menuer.setDark(true); menuer.setDifference(true); menuer.setSmall(true);
     let { data } = $props();
-	$inspect(data)
-    let { product } = $derived(data);
-	$inspect(product)
-    const keysObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_keys"));
-    const valuesObj = $derived(product.custom_keys_values?.find(item => item?.key === "custom_values"));
-    const keysList = $derived(keysObj ? JSON.parse(keysObj.value) : []);
-    const valuesList = $derived(valuesObj ? JSON.parse(valuesObj.value) : []);
+    const product = $derived(data.product);
+    const { keysList, valuesList } = $derived.by(() => {
+        const keysObj = product?.custom_keys_values?.find(item => item?.key === "custom_keys");
+        const valuesObj = product?.custom_keys_values?.find(item => item?.key === "custom_values");
+        return {
+            keysList: keysObj ? JSON.parse(keysObj.value) : [],
+            valuesList: valuesObj ? JSON.parse(valuesObj.value) : [],
+        };
+    });
 </script>
 
-<Head />
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
 	<ol>
 		<li><a href={localizeHref(`/shop`)}>{m.shop()}</a></li> • <li><a href={localizeHref(`/shop/${product.handle}`)}>{product.title}</a></li>
@@ -168,7 +168,7 @@
 	</section>
 	<section id="related">
 		<h4 class="section-title wo-24">{m.you_may_like()}</h4>
-		<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.see_all()} →</a>
+		<a class="cta btn-s in-13 uppercase" href={localizeHref(`/shop`)}>{m.see_all()} <span aria-hidden="true">→</span></a>
 		{#if data.related}
 			<div class="related">
 				{#each data.related as relatedProduct}

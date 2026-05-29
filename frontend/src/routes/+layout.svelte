@@ -11,6 +11,7 @@
 
     // stores
     import { cartStore } from '$lib/stores/cart.svelte.js';
+    import { getCountry } from '$lib/stores/country.svelte.js';
     import { blur, fade } from 'svelte/transition';
     import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
@@ -19,7 +20,10 @@
     // functions
     let { data, children } = $props();
 	let loaded = $state(false)
+	const countryStore = getCountry()
+
     onMount(() => {
+		countryStore.set(data.country)
         cartStore.init();
 		loaded = true;
     });
@@ -34,18 +38,17 @@
 	<link rel="manifest" href="/favicon/site.webmanifest" />
 </svelte:head>
 
-
 <Head />
 
 {#if loaded}
 	<div class="site-wrapper">
-		<Header />
+		<Header country={data.country} countries={data.countries} />
 		<Cart cartInfo={data.cartInfo}/>
 		{#key page.route.id}
 			<div class="page-wrapper">
 				{@render children()}
 			</div>
 		{/key}
-		<Footer policies={data.policies} contacts={data.contacts} info={data.info}/>
+		<Footer policies={data.policies} contacts={data.contacts} info={data.info} country={data.country} countries={data.countries}/>
 	</div>
 {/if}

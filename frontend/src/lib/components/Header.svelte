@@ -12,12 +12,29 @@
     // stores
     import { getMenu } from '$lib/stores/menu.svelte.js';
     import { cartStore } from '$lib/stores/cart.svelte.js';
+    import { getCountry } from '$lib/stores/country.svelte.js';
 
     // functions
+    let { countries = [], country = 'IT' } = $props();
     let menuer = getMenu(); menuer.setDark(false); menuer.setSmall(false);
     let scrollY = $state(0);
     let hoverLogo = $state(false);
     useScrollLock(() => menuer.open);
+    const countryStore = getCountry();
+    const currentCountry = $derived(countries.find(c => c.isoCode === countryStore.current));
+    const currentCountryLabel = $derived(currentCountry ? `${currentCountry.name} (${currentCountry.currency.isoCode})` : (country ?? ''));
+
+    async function handleCountryChange(e) {
+        const selected = e.target.value;
+        countryStore.set(selected);
+        await fetch('/api/country', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ country: selected })
+        });
+        cartStore.clear();
+        window.location.reload();
+    }
 
     $effect(() => {
         if (page.route.id !== '/shop/[handle]') {
@@ -26,14 +43,12 @@
         }
 		
         if (page.route.id === '/') {
-			console.log("homepage");
             if (scrollY >= innerHeight.current - 32 - 13*1.2) menuer.setDifference(true)
             else menuer.setDifference(false)
         }
 		
         if ((page.route.id === '/shop' && page.url.searchParams.get('view') !== 'list') || page.route.id === '/beads' || page.route.id === '/contacts') {			
 			if (innerWidth.current > parseInt(bp.lg)) {
-				console.log("lar");
 				if (scrollY >= Math.min(Math.max(innerHeight.current/100*70, 500), 650) - 32 - 13*1.2) {
 					menuer.setDifference(true)
 					return
@@ -42,7 +57,6 @@
 				}
 			}
 			if (innerWidth.current > parseInt(bp.sm) && innerWidth.current <= parseInt(bp.lg)) {
-				console.log("mid");
 				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 500) - 32 - 13*1.2) {
 					menuer.setDifference(true)
 					return
@@ -51,7 +65,6 @@
 				}
 			}
             if (innerWidth.current <= parseInt(bp.sm)) {
-				console.log("sm");
 				if (scrollY >= Math.min(Math.max(innerHeight.current/100*60, 350), 400) - 40 - 13*1.2) {
 					menuer.setDifference(true)
 					return
@@ -87,14 +100,14 @@
 <svelte:window bind:scrollY></svelte:window>
 <header>
     <nav class="in-13 uppercase in-24-mb normalcase-mb {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}" aria-label="Main navigation">
-        <button class="menu-switch btn-m in-13 uppercase" onclick={() => menuer.setOpen(!menuer.open)}>Menu
+        <button class="menu-switch btn-m in-13 uppercase" aria-expanded={menuer.open} aria-controls="main-menu" onclick={() => menuer.setOpen(!menuer.open)}>Menu
 			<div class="hamburger {menuer.open ? 'open' : ''}">
 				<div class="line"></div>
 				<div class="line"></div>
 				<div class="line"></div>
 			</div>
 		</button>
-		<a href={localizeHref("/")} class="logo-mobile menu-item" aria-label="Logo"
+		<a href={localizeHref("/")} class="logo-mobile menu-item" aria-label="Lopes Pegna"
 		onclick={() => {menuer.setOpen(false);}}
 		onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
 		onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
@@ -107,7 +120,7 @@
 				<li class="about"><a class="menu-item btn-s" aria-current={page.route.id === '/about' ? 'page' : undefined} href={localizeHref("/about")} onclick={() => {menuer.setOpen(false)}}>{m.about()}</a></li>
 				<li class="beads"><a class="menu-item btn-s" aria-current={page.route.id === '/beads' ? 'page' : undefined} href={localizeHref("/beads")} onclick={() => {menuer.setOpen(false)}}>{m.beads()}</a></li>
 			</div>
-        	<a href={localizeHref("/")} class="logo menu-item" aria-label="Logo"
+        	<a href={localizeHref("/")} class="logo menu-item" aria-label="Lopes Pegna"
 			onclick={() => {menuer.setOpen(false);}}
 			onpointerenter={(e) => {if (e.pointerType === "mouse") hoverLogo = true}}
 			onpointerleave={(e) => {if (e.pointerType === "mouse") hoverLogo = false}}
@@ -115,7 +128,7 @@
 				<LogoSvg {hoverLogo}/>
 			</a>
 			<div class="menu-right">
-				<li class="contacts"><a class="menu-item btn-s" aria-current={page.url.pathname.startsWith('/contacts') ? 'page' : undefined} href={localizeHref("/contacts")} onclick={() => {menuer.setOpen(false)}}>{m.contacts()}</a></li>
+				<li class="contacts"><a class="menu-item btn-s" aria-current={page.route.id === '/contacts' ? 'page' : undefined} href={localizeHref("/contacts")} onclick={() => {menuer.setOpen(false)}}>{m.contacts()}</a></li>
 				<li class="cart">
 					<button 
 						class="menu-item btn-s in-13 uppercase in-24-mb normalcase-mb" 
@@ -136,6 +149,18 @@
 						}}>{locale}</button>
 				{/each}
 			</li>
+			{#if countries.length > 0}
+				<li class="country-switch in-13 uppercase">
+					<div class="select-wrapper btn-s">
+						<span class="select-display" aria-hidden="true">{currentCountryLabel} <span class="select-arrow"></span></span>
+						<select value={countryStore.current ?? country} onchange={handleCountryChange} aria-label="Select country">
+							{#each countries as c (c.isoCode)}
+								<option value={c.isoCode}>{c.name} ({c.currency.isoCode})</option>
+							{/each}
+						</select>
+					</div>
+				</li>
+			{/if}
 		</ul>
     </nav>
 	{#if cartStore.current?.totalQuantity > 0}
@@ -363,6 +388,48 @@ header nav {
 			display: flex;
 			gap: var(--sp-6);
 			margin-top: var(--sp-36);
+		}
+	}
+
+	.country-switch {
+		display: none;
+
+		@media (width <= #{$lg}) {
+			display: flex;
+			margin-top: var(--sp-6);
+		}
+
+		.select-wrapper {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+
+			.select-display {
+				display: inline-flex;
+				align-items: center;
+				gap: .4em;
+				white-space: nowrap;
+				pointer-events: none;
+
+				.select-arrow {
+					display: inline-block;
+					width: .5em;
+					height: .5em;
+					border-right: 1.5px solid currentColor;
+					border-bottom: 1.5px solid currentColor;
+					transform: rotate(45deg) translateY(-30%);
+					flex-shrink: 0;
+				}
+			}
+
+			select {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				opacity: 0;
+				cursor: pointer;
+			}
 		}
 	}
 

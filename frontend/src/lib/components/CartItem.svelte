@@ -6,21 +6,24 @@
     import ImageShopify from './ImageShopify.svelte';
 
     // stores
+    import { cartStore } from '$lib/stores/cart.svelte.js';
+    import { getMenu } from '$lib/stores/menu.svelte.js';
 
     // functions
     let { line, removeItem } = $props();
+    const menuer = getMenu();
 </script>
 
 <li class="cart-item in-13 uppercase">
     {#if line.merchandise.image}
-        <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)}>
+        <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)} onclick={() => { cartStore.isOpen = false; menuer.setOpen(false); }}>
 			<ImageShopify image={line.merchandise.image} />
         </a>
     {/if}
     <div class="item-info">
         <div class="item-content">
             <h4 class="wo-24 wo-18-mb uppercase">
-                <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)}>{line.merchandise.product.title}</a>
+                <a href={localizeHref(`/shop/${line.merchandise.product.handle}`)} onclick={() => { cartStore.isOpen = false; menuer.setOpen(false); }}>{line.merchandise.product.title}</a>
             </h4>
             {#if line.merchandise.product.collections?.nodes?.length > 0}
                 <span class="collection">{line.merchandise.product.collections.nodes[0].singular?.value || line.merchandise.product.collections.nodes[0].title}</span>

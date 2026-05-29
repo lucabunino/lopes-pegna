@@ -1,5 +1,6 @@
 import { getBeads, getBooks, getBooksIntro } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
+import { m } from '$lib/paraglide/messages.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -16,6 +17,11 @@ export async function load({ params }) {
             beads,
 			books,
 			booksIntro,
+			seoSingle: {
+				seoTitle: m.beads(),
+				seoDescription: beads.seoDescription,
+				seoImage: beads.seoImage
+			}
         };
     } catch (err) {
         throw error(500, 'Failed to retrieve beads data');

@@ -27,7 +27,9 @@
 				thresholdDelta: 10, 
 			},
 			on: {
-				init(s) { if (dev) console.log('SwiperFixedHeight initialized'); },
+				init(s) {
+					if (dev) console.log('SwiperFixedHeight initialized');
+				},
 			},
         };
         Object.assign(swiperEl, swiperParams);

@@ -1,18 +1,18 @@
 <script>
-    // imports
-    import Media from '$lib/components/Media.svelte';
-    import Image from '$lib/components/Image.svelte';
-    import { PortableText } from '@portabletext/svelte';
-    import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte';
-    import { m } from '$lib/paraglide/messages.js';
+	// imports
+	import Media from '$lib/components/Media.svelte'
+	import Book from '$lib/components/Book.svelte'
+	import { PortableText } from '@portabletext/svelte'
+	import PortableTextStyleContent from '$lib/components/portableTextStyles/PortableTextStyleContent.svelte'
+	import { m } from '$lib/paraglide/messages.js'
 
-    // stores
-    import { getMenu } from '$lib/stores/menu.svelte.js';
-    import { localizeHref } from '$lib/paraglide/runtime.js';
+	// stores
+	import { getMenu } from '$lib/stores/menu.svelte.js'
+	import { localizeHref } from '$lib/paraglide/runtime.js'
 
-    // functions
-    let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(false); menuer.setSmall(false);
-    let { data } = $props();
+	// functions
+	let menuer = getMenu(); menuer.setDark(false); menuer.setDifference(false); menuer.setSmall(false)
+	let { data } = $props()
 </script>
 
 <nav aria-label="Breadcrumb" class="breadcrumb-mobile in-14 {menuer.open ? 'open' : 'closed'} {menuer.small ? 'small' : 'big'} {menuer.dark ? 'dark' : 'light'} {menuer.difference ? 'difference' : 'normal'}">
@@ -20,68 +20,41 @@
 		<li><a href={localizeHref(`/beads`)}>{m.beads()}</a></li>
 	</ol>
 </nav>
+
 <main>
+	<h1 class="sr-only">{m.beads()}</h1>
 	<section id="hero">
 		{#if data.beads.heroMedia}
-			<Media media={data.beads.heroMedia} cover={true}/>
+			<Media media={data.beads.heroMedia} cover={true} />
 		{/if}
 	</section>
+
 	{#if data.beads.content}
 		<section id="content" class="portableText content wo-18 wo-15-mb">
 			<PortableText
-			value={data.beads.content}
-			components={{
-				block: {
-					normal: PortableTextStyleContent,
-					h2: PortableTextStyleContent,
-				},
-				listItem: PortableTextStyleContent,
-				marks: {
-					link: PortableTextStyleContent,
-				},
-				types: {
-					image: PortableTextStyleContent,
-				}
-			}}/>
+				value={data.beads.content}
+				components={{
+					block: { normal: PortableTextStyleContent, h2: PortableTextStyleContent },
+					listItem: PortableTextStyleContent,
+					marks: { link: PortableTextStyleContent },
+					types: { image: PortableTextStyleContent }
+				}}
+			/>
 		</section>
 	{/if}
 
 	{#if data.books}
 		<section id="books">
-			<h3 class="wo-36 section-title">{m.sarah_s_favourites()}</h3>
+			<h2 class="wo-36 section-title">{m.sarah_s_favourites()}</h2>
 			{#if data.booksIntro}
 				<p class="intro in-15">{data.booksIntro.introText}</p>
 			{/if}
 			<div class="books">
-				{#each data.books as book, i}
-					{#if book.href}
-						<a class="book" href={book.href} target="_blank" rel="noopener noreferrer">
-							{@render bookContent(book)}
-						</a>
-					{:else}
-						<div class="book">
-							{@render bookContent(book)}
-						</div>
-					{/if}
-					{#snippet bookContent(book)}
-						{#if book.cover}
-							<div class="cover-wrapper" style="--bgColor: {book.coverBackground ? book.coverBackground.hex : undefined}">
-								<Image image={book.cover} className={'bookCover'}/>
-							</div>
-						{/if}
-						{#if book.title}
-							<h4 class="wo-24 wo-15-mb title">{book.title}</h4>
-						{/if}
-						{#if book.info}
-							<p class="info in-15 in-13-mb">{book.info}</p>
-						{/if}
-						{#if book.href}
-							<button class="cta btn-m in-12 uppercase" href={book.href} target="_blank" rel="noopener noreferrer">Scopri di più</button>
-						{/if}
-					{/snippet}
+				{#each data.books as book (book._id)}
+					<Book {book} />
 				{/each}
 			</div>
-		</section>	
+		</section>
 	{/if}
 </main>
 
@@ -94,7 +67,7 @@ main {
 		min-height: 500px;
 		max-height: 650px;
 		position: relative;
-		
+
 		&::after {
 			content: '';
 			position: absolute;
@@ -104,19 +77,17 @@ main {
 			height: 50%;
 			z-index: 1;
 			pointer-events: none;
-			background: linear-gradient(
-				to bottom, 
-				rgba(0, 0, 0, .5) 50%, 
-				rgba(0, 0, 0, 0) 100%
-			);
+			background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 50%, rgba(0, 0, 0, 0) 100%);
 		}
 	}
+
 	#content {
 		padding: var(--sp-80) var(--sp-24);
 		display: grid;
-    	grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		column-gap: var(--sp-6);
 	}
+
 	#books {
 		padding: var(--sp-152) var(--sp-24) var(--sp-200);
 
@@ -130,44 +101,6 @@ main {
 			grid-template-columns: repeat(4, 1fr);
 			column-gap: var(--sp-6);
 			row-gap: var(--sp-60);
-
-			.book {
-				display: flex;
-				flex-direction: column;
-
-				.cover-wrapper {
-					aspect-ratio: 3/4;
-					background-color: var(--black);
-					background-color: var(--bgColor);
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					border: solid 3vw transparent;
-					transition: var(--transition);
-				}
-
-				.title {
-					margin-top: var(--sp-21);
-					padding-right: var(--sp-12);
-				}
-				.info {
-					margin-top: var(--sp-10);
-					padding-right: var(--sp-12);
-				}
-				.cta {
-					margin-top: var(--sp-25);
-				}
-			}
-
-			a.book:hover {
-				.cover-wrapper {
-					border-radius: var(--sp-24);
-				}
-				.cta {
-					background-color: var(--black);
-					color: var(--white);
-				}
-			}
 		}
 	}
 
@@ -183,35 +116,28 @@ main {
 		}
 		#books {
 			padding: var(--sp-160) var(--sp-12) var(--sp-200);
-			.books {
-				grid-template-columns: repeat(3, 1fr);
-			}
+			.books { grid-template-columns: repeat(3, 1fr); }
 		}
 	}
+
 	@media (width <= #{$md}) {
 		display: grid;
 		grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
+		grid-template-rows: auto auto auto;
 
-		#content {
-			padding: var(--sp-24) var(--sp-12) var(--sp-48);
-		}
+		#content { padding: var(--sp-24) var(--sp-12) var(--sp-48); }
 		#books {
-			.books {
-				grid-template-columns: repeat(2, 1fr);
-			}
+			.books { grid-template-columns: repeat(2, 1fr); }
 		}
 	}
+
 	@media (width <= #{$sm}) {
-		#hero {
-			max-height: 400px;
-		}
+		#hero { max-height: 400px; }
 	}
+
 	@media (width <= #{$xxs}) {
 		#books {
-			.books {
-				grid-template-columns: repeat(1, 1fr);
-			}
+			.books { grid-template-columns: repeat(1, 1fr); }
 		}
 	}
 }

@@ -22,13 +22,14 @@
 	</ol>
 </nav>
 <main class="wo-24 wo-15-mb">
+	<h1 class="sr-only">{m.contacts()}</h1>
 	{#if data.contacts.heroMedia}
 		<section id="hero">
 			<Media media={data.contacts.heroMedia} cover={true}/>
 		</section>
 	{/if}
 	<section id="contacts">
-		<h4 class="section-title in-14">{m.contacts()}</h4>
+		<h2 class="section-title in-14">{m.contacts()}</h2>
 		<div class="contacts">
 			{#if data.contacts.infoEmail}
 				<div class="info">
@@ -73,12 +74,12 @@
 	{/if}
 	{#if data.contacts.appointmentText}
 		<section id="appointment">
-			<h4 class="section-title in-14">{m.book_an_appointment()}</h4>
+			<h2 class="section-title in-14">{m.book_an_appointment()}</h2>
 			<div class="contacts">
 				<div class="appointment">
 					<p>{data.contacts.appointmentText}</p>
 					{#if data.contacts.infoEmail}
-						<a class="btn-m in-12 uppercase" href={data.contacts.infoEmail} target="_blank" rel="noopener noreferrer">{m.book_an_appointment()}</a>
+						<a class="btn-m in-12 uppercase" href="mailto:{data.contacts.infoEmail}">{m.book_an_appointment()}</a>
 					{/if}
 				</div>
 			</div>

@@ -12,7 +12,6 @@
 
     // functions
     let cartInfo = $derived(page.data.cartInfo);
-	$inspect(cartInfo)
 </script>
 
 <div class="cart-content hide-scrollbar">

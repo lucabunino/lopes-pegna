@@ -54,6 +54,8 @@
 </div>
 
 <style lang="scss">
+@use '$lib/scss/breakpoints.module.scss' as *;
+
     .image-wrapper {
         position: relative;
         width: fit-content;
@@ -77,7 +79,7 @@
 
 		&.bookCover::after {
 			content: '';
-			background-image: url('./img/shadow.webp');
+			background-image: url('$lib/img/shadow.webp');
 			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: right;

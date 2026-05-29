@@ -3,10 +3,11 @@ import { getInfoEmail, getShop } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
 import { error } from '@sveltejs/kit';
 
-export async function load({ params, getClientAddress }) {
+export async function load({ params, getClientAddress, cookies }) {
     const { handle } = params;
     const lang = getLocale();
     const buyerIP = getClientAddress();
+    const country = cookies.get('selected_country') ?? cookies.get('detected_country') ?? 'IT';
 
     try {
         const [productData, relatedData, shop, bundlesData] = await Promise.all([
@@ -14,19 +15,22 @@ export async function load({ params, getClientAddress }) {
                 query: GET_PRODUCT_BY_HANDLE,
                 variables: { handle },
                 lang,
+                country,
                 buyerIP,
             }),
             shopifyFetch({
                 query: GET_RELATED_PRODUCTS,
                 variables: { handle },
                 lang,
+                country,
                 buyerIP,
             }),
             getShop(lang),
             shopifyFetch({
                 query: GET_BUNDLES,
-				variables: { handle },
+                variables: { handle },
                 lang,
+                country,
                 buyerIP
             })
         ]);

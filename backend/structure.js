@@ -60,37 +60,13 @@ export const myStructure = (S, context) => {
       .title('Seo')
       .icon(EarthGlobeIcon)
       .child(S.document().schemaType('seo').documentId('seo')),
-	orderableDocumentListDeskItem({type: 'policy', title: 'Policies', icon: BillIcon, S, context}),
-	S.listItem()
-      .title('Policies')
-      .icon(BillIcon)
-      .child(
-        S.list()
-          .title('Policies')
-          .items([
-            S.listItem()
-              .title('Privacy')
-              .icon(AccessDeniedIcon)
-              .child(S.document().schemaType('policy').documentId('privacy')),
-            S.listItem()
-              .title('Cookies')
-              .icon(RobotIcon)
-              .child(S.document().schemaType('policy').documentId('cookies')),
-            S.listItem()
-              .title('Termini e condizioni')
-              .icon(TextIcon)
-              .child(S.document().schemaType('policy').documentId('terms')),
-			S.divider(),
-            S.listItem()
-              .title('Other Policies')
-              .icon(BillIcon)
-              .child(
-                S.documentList()
-                  .title('Other Policies')
-                  .filter('_type == "policy" && !(_id in ["privacy", "cookies", "terms", "drafts.privacy", "drafts.cookies", "drafts.terms"])')
-              ),
-          ]),
-      ),
+	orderableDocumentListDeskItem({
+		type: 'policy',
+		title: 'Policies',
+		icon: BillIcon,
+		S,
+		context,
+	}),
   ];
 
   return S.list()

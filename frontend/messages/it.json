@@ -62,6 +62,7 @@
 	"alert_set_contains_cart_item": "Stai aggiungendo un set che contiene un prodotto già presente nel carrello.",
 	"alert_item_in_cart_set": "Stai aggiungendo un prodotto che è già incluso in un set presente nel tuo carrello.",
 	"alert_set_contained_in_cart_set": "Stai aggiungendo un set che ha prodotti in comune con un altro set presente nel tuo carrello.",
+	"country": "Paese",
 
 	"close": "Chiudi"
 }

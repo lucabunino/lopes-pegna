@@ -50,6 +50,11 @@ export const GET_LOCALIZATION = `
         isoCode
         name
       }
+      availableCountries {
+        isoCode
+        name
+        currency { isoCode symbol }
+      }
     }
   }
 `;

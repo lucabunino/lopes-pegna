@@ -26,31 +26,37 @@ const mediaProjection = `
     }
 `;
 
-export async function getSeo() {
+export async function getSeo(lang) {
 	return await client.fetch(
 		`*[_type == "seo" && !(_id in path('drafts.**'))] {
 			seoTitle,
-			seoDescription,
+			"seoDescription": seoDescription[language == $lang][0].value,
 			seoImage,
-		}|order(year desc)`
+		}|order(year desc)`,
+		{lang}
 	);
 }
 export async function getPolicies(lang) {
-	console.log(lang);
-	
     return await client.fetch(
         `
         *[ _type == "policy" && inFooter == true && !(_id in path('drafts.**'))]|order(orderRank asc) {
-            kind,
             "title": title[language == $lang][0].value,
             slug,
-            kind
         }
         `,
         { lang }
     );
 }
-export async function getInfo(lang) {	
+export async function getPolicy(slug, lang) {
+	return await client.fetch(
+		`*[_type == "policy" && slug.current == $slug && !(_id in path('drafts.**'))][0] {
+			"title": title[language == $lang][0].value,
+			"content": content[language == $lang][0].value
+		}`,
+		{ slug, lang }
+	)
+}
+export async function getInfo(lang) {
     return await client.fetch(
         `
         *[ _type == "info" && !(_id in path('drafts.**'))][0] {
@@ -101,6 +107,8 @@ export async function getHomepage(lang) {
 				},
 				"beadsText": beadsText[language == $lang][0].value,
 				beadsImages[] { ${mediaProjection} },
+				"seoDescription": seoDescription[language == $lang][0].value,
+				seoImage,
 		}`,
         { lang }
     );
@@ -126,7 +134,9 @@ export async function getBeads(lang) {
                         metadata { dimensions, lqip }
                     }
                 }
-            }
+            },
+            "seoDescription": seoDescription[language == $lang][0].value,
+            seoImage,
         }`,
         { lang }
     );
@@ -180,6 +190,8 @@ export async function getContacts(lang) {
                 posterMobile { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
                 imageMobile { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } }
             },
+            "seoDescription": seoDescription[language == $lang][0].value,
+            seoImage,
         }`,
         { lang }
     );
@@ -197,7 +209,6 @@ export async function getShop(lang) {
                 imageMobile { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } }
             },
             shopPolicies[]->{
-                kind,
                 "title": title[language == $lang][0].value,
                 slug,
                 "content": content[language == $lang][0].value
@@ -215,11 +226,6 @@ export async function getInfoEmail() {
         `
     );
 }
-
-
-
-
-
 export async function getAbout(lang) {
     return await client.fetch(
         `*[_type == "about" && !(_id in path('drafts.**'))][0] {
@@ -237,65 +243,10 @@ export async function getAbout(lang) {
                 _type == "image" => {
                     "image": { "asset": asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
                 },
-            }
+            },
+            "seoDescription": seoDescription[language == $lang][0].value,
+            seoImage,
         }`,
         { lang }
-    );
-}
-export async function getWorks() {
-    return await client.fetch(
-        `*[_type == "work" && status == "public" && !(_id in path('drafts.**'))]|order(orderRank) {
-			_id,
-            kind,
-			title,
-			slug,
-			date,
-			city->{ title, slug },
-			gridThumbnail { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
-			listThumbnail { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
-        }`
-    );
-}
-export async function getWork(slug) {
-	return await client.fetch(
-		`
-		*[_type == "work" && slug.current == $slug] {
-			_id,
-			title,
-			slug,
-			date,
-			kind,
-			city->{ title, slug },
-			moreInfo,
-			images[] { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
-			"seoSingle": {
-				"seoTitle": title,
-				seoDescription,
-				seoImage,
-			},
-			orderRank,
-            "prev": coalesce(
-                *[_type == "work" && orderRank < ^.orderRank] | order(orderRank desc)[0],
-                *[_type == "work"] | order(orderRank desc)[0],
-            ) { title, slug, "imagesCount": count(images) },
-            "next": coalesce(
-                *[_type == "work" && orderRank > ^.orderRank] | order(orderRank asc)[0],
-                *[_type == "work"] | order(orderRank asc)[0],
-            ) { title, slug }
-		}
-		`, { slug });
-}
-export async function getVideo() {
-    return await client.fetch(
-        `*[_type == "video" && !(_id in path('drafts.**'))][0] {
-			videoDesktop {
-				"url": video.asset->url,
-				poster { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
-			},
-			videoMobile {
-				"url": video.asset->url,
-				poster { asset->{ _id, _ref, _type, title, description, altText, metadata { dimensions, lqip } } },
-			}
-        }`
     );
 }

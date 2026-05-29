@@ -33,7 +33,9 @@
 				768: { slidesPerView: 2.7 },
 			},
 			on: {
-				init(s) { if (dev) console.log('SwiperProductsMobile initialized'); },
+				init(s) {
+					if (dev) console.log('SwiperProductsMobile initialized');
+				},
 			},
         };
         Object.assign(swiperEl, swiperParams);

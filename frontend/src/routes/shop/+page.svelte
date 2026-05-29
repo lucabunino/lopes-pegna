@@ -172,7 +172,7 @@
 		<div class="views">
 			<button class="grid btn-shop in-13 uppercase" class:active={activeView === 'grid'} aria-pressed={activeView === 'grid'} onclick={() => updateParams(innerWidth.current > 1080 ? { view: 'grid', cols: activeCols } : { view: 'grid' })}>
 				<span>{m.grid()}</span>
-				<svg width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg aria-hidden="true" width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect width="8.78613" height="5.94336" fill="currentColor"/>
 					<rect y="6.94336" width="8.78613" height="5.94336" fill="currentColor"/>
 					<rect x="9.78613" width="8.78613" height="5.94336" fill="currentColor"/>
@@ -184,7 +184,7 @@
 			<button class="grid-value btn-shop in-13 uppercase" class:active={activeCols === initialCols+1 && activeView === 'grid'} aria-pressed={activeCols === initialCols+1 && activeView === 'grid'} onclick={() => {updateParams({ view: 'grid', cols: initialCols+1}); activeCols=initialCols+1}}>{initialCols+1}</button>
 			<button class="list btn-shop in-13 uppercase" class:active={activeView === 'list'} aria-pressed={activeView === 'list'} onclick={() => {updateParams({ view: 'list' }); scrollY=0 }}>
 				<span>{m.list()}</span>
-				<svg width="19" height="8" viewBox="0 0 19 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg aria-hidden="true" width="19" height="8" viewBox="0 0 19 8" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect width="18.5723" height="2" fill="currentColor"/>
 					<rect y="2.90674" width="18.5723" height="2" fill="currentColor"/>
 					<rect y="5.81348" width="18.5723" height="2" fill="currentColor"/>

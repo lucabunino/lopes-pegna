@@ -30,7 +30,7 @@
 <main id="cart-page" class="in-14">
 	<div class="cart-header uppercase">
         <h1 class="uppercase">{m.cart()}</h1>
-		<a class="btn-shop" href={localizeHref(`/shop`)}>{m.shop()} →</a>
+		<a class="btn-shop" href={localizeHref(`/shop`)}>{m.shop()} <span aria-hidden="true">→</span></a>
 	</div>
 	<CartContent />
 </main>

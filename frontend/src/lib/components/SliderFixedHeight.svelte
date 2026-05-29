@@ -28,9 +28,7 @@
 			},
             on: {
                 init() {
-					if (dev) {
-						console.log('SwiperFixedHeight initialized');
-					}
+					if (dev) console.log('SwiperFixedHeight initialized');
                 },
             },
         };

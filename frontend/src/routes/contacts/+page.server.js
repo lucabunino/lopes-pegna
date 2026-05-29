@@ -1,5 +1,6 @@
 import { getContacts } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
+import { m } from '$lib/paraglide/messages.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -10,6 +11,11 @@ export async function load({ params }) {
 
         return {
             contacts,
+			seoSingle: {
+				seoTitle: m.contacts(),
+				seoDescription: contacts.seoDescription,
+				seoImage: contacts.seoImage
+			}
         };
     } catch (err) {
         throw error(500, 'Failed to retrieve beads data');

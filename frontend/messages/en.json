@@ -62,6 +62,7 @@
 	"alert_set_contains_cart_item": "You are adding a set that contains a product already in your cart.",
 	"alert_item_in_cart_set": "You are adding a product that is already included in a set in your cart.",
 	"alert_set_contained_in_cart_set": "You are adding a set that shares products with another set in your cart.",
+	"country": "Country",
 
 	"close": "Close"
 }

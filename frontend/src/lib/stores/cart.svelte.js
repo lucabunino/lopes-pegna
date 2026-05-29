@@ -1,164 +1,141 @@
-import { shopifyFetch, CART_QUERY, CART_CREATE_MUTATION, CART_LINES_ADD_MUTATION, CART_LINES_UPDATE_MUTATION, CART_LINES_REMOVE_MUTATION } from '$lib/utils/shopify';
-import { getLocale } from '$lib/paraglide/runtime';
+import { shopifyFetch, CART_QUERY, CART_CREATE_MUTATION, CART_LINES_ADD_MUTATION, CART_LINES_UPDATE_MUTATION, CART_LINES_REMOVE_MUTATION } from '$lib/utils/shopify'
+import { getLocale } from '$lib/paraglide/runtime'
+import { getCountry } from '$lib/stores/country.svelte.js'
 
-let cart = $state(null);
-let isOpen = $state(false);
+let cart = $state(null)
+let isOpen = $state(false)
 
-const CART_ID_STORAGE_KEY = 'shopify_cart_id';
+const CART_ID_STORAGE_KEY = 'shopify_cart_id'
+
+function country() {
+	return getCountry().current
+}
 
 async function fetchCart() {
-    const cartId = localStorage.getItem(CART_ID_STORAGE_KEY);
-    if (!cartId) return;
+	const cartId = localStorage.getItem(CART_ID_STORAGE_KEY)
+	if (!cartId) return
 
-    const lang = getLocale();
-    const data = await shopifyFetch({
-        query: CART_QUERY,
-        variables: { cartId },
-        lang
-    });
+	const lang = getLocale()
+	const data = await shopifyFetch({
+		query: CART_QUERY,
+		variables: { cartId },
+		lang,
+		country: country(),
+	})
 
-    if (data?.cart) {
-        cart = data.cart;
-    } else {
-        localStorage.removeItem(CART_ID_STORAGE_KEY);
-        cart = null;
-    }
+	if (data?.cart) {
+		cart = data.cart
+	} else {
+		localStorage.removeItem(CART_ID_STORAGE_KEY)
+		cart = null
+	}
 }
 
 async function createCart(variantId) {
-    const lang = getLocale();
-    const data = await shopifyFetch({
-        query: CART_CREATE_MUTATION,
-        variables: {
-            input: {
-                lines: [{ merchandiseId: variantId, quantity: 1 }]
-            }
-        },
-        lang
-    });
+	const lang = getLocale()
+	const data = await shopifyFetch({
+		query: CART_CREATE_MUTATION,
+		variables: { input: { lines: [{ merchandiseId: variantId, quantity: 1 }] } },
+		lang,
+		country: country(),
+	})
 
-    if (data?.cartCreate?.cart) {
-        const newCart = data.cartCreate.cart;
-        localStorage.setItem(CART_ID_STORAGE_KEY, newCart.id);
-        await fetchCart();
-        isOpen = true;
-    }
+	if (data?.cartCreate?.cart) {
+		localStorage.setItem(CART_ID_STORAGE_KEY, data.cartCreate.cart.id)
+		await fetchCart()
+		isOpen = true
+	}
 }
 
 export const cartStore = {
-    get current() { return cart; },
-    get isOpen() { return isOpen; },
-    set isOpen(val) { isOpen = val; },
-    get totalQuantity() { return cart?.totalQuantity || 0; },
+	get current() { return cart },
+	get isOpen() { return isOpen },
+	set isOpen(val) { isOpen = val },
+	get totalQuantity() { return cart?.totalQuantity || 0 },
 
-    toggle() {
-        isOpen = !isOpen;
-    },
+	toggle() { isOpen = !isOpen },
 
-    async init() {
-        if (typeof window === 'undefined') return;
-        await fetchCart();
-    },
+	async init() {
+		if (typeof window === 'undefined') return
+		await fetchCart()
+	},
 
-    async addItem(variantId, components = []) {
-        const lang = getLocale();
-        const { m } = await import('$lib/paraglide/messages.js');
+	async refresh() {
+		if (typeof window === 'undefined') return
+		await fetchCart()
+	},
 
-        if (cart?.lines?.nodes?.length > 0) {
-            // 1. Check if incoming item (if single) is already part of a set in the cart
-            const incomingIsComponentOfCartSet = cart.lines.nodes.some(line => 
-                line.merchandise.components?.nodes?.some(c => c.productVariant.id === variantId)
-            );
+	clear() {
+		if (typeof window === 'undefined') return
+		localStorage.removeItem(CART_ID_STORAGE_KEY)
+		cart = null
+	},
 
-            if (incomingIsComponentOfCartSet) {
-                alert(m.alert_item_in_cart_set());
-                return;
-            }
+	async addItem(variantId, components = []) {
+		const lang = getLocale()
+		const { m } = await import('$lib/paraglide/messages.js')
 
-            // 2. Check if incoming item (if set) contains an item already in the cart
-            if (components && components.length > 0) {
-                const incomingSetContainsCartItem = cart.lines.nodes.some(line => 
-                    components.some(c => c.productVariant.id === line.merchandise.id)
-                );
+		if (cart?.lines?.nodes?.length > 0) {
+			const incomingIsComponentOfCartSet = cart.lines.nodes.some(line =>
+				line.merchandise.components?.nodes?.some(c => c.productVariant.id === variantId)
+			)
+			if (incomingIsComponentOfCartSet) { alert(m.alert_item_in_cart_set()); return }
 
-                if (incomingSetContainsCartItem) {
-                    alert(m.alert_set_contains_cart_item());
-                    return;
-                }
+			if (components?.length > 0) {
+				const incomingSetContainsCartItem = cart.lines.nodes.some(line =>
+					components.some(c => c.productVariant.id === line.merchandise.id)
+				)
+				if (incomingSetContainsCartItem) { alert(m.alert_set_contains_cart_item()); return }
 
-                // 3. Check if incoming item (if set) overlaps with a set already in the cart
-                const incomingSetOverlapsWithCartSet = cart.lines.nodes.some(line => {
-                    const cartSetComponents = line.merchandise.components?.nodes || [];
-                    if (cartSetComponents.length > 0) {
-                        return components.some(incomingComp => 
-                            cartSetComponents.some(cartComp => incomingComp.productVariant.id === cartComp.productVariant.id)
-                        );
-                    }
-                    return false;
-                });
+				const incomingSetOverlapsWithCartSet = cart.lines.nodes.some(line => {
+					const cartSetComponents = line.merchandise.components?.nodes || []
+					if (cartSetComponents.length > 0) {
+						return components.some(incomingComp =>
+							cartSetComponents.some(cartComp => incomingComp.productVariant.id === cartComp.productVariant.id)
+						)
+					}
+					return false
+				})
+				if (incomingSetOverlapsWithCartSet) { alert(m.alert_set_contained_in_cart_set()); return }
+			}
+		}
 
-                if (incomingSetOverlapsWithCartSet) {
-                    alert(m.alert_set_contained_in_cart_set());
-                    return;
-                }
-            }
-        }
+		const cartId = localStorage.getItem(CART_ID_STORAGE_KEY)
+		if (!cartId) { await createCart(variantId); return }
 
-        const cartId = localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (!cartId) {
-            await createCart(variantId);
-            return;
-        }
+		const data = await shopifyFetch({
+			query: CART_LINES_ADD_MUTATION,
+			variables: { cartId, lines: [{ merchandiseId: variantId, quantity: 1 }] },
+			lang,
+			country: country(),
+		})
+		if (data?.cartLinesAdd?.cart) { await fetchCart(); isOpen = true }
+	},
 
-        const data = await shopifyFetch({
-            query: CART_LINES_ADD_MUTATION,
-            variables: {
-                cartId,
-                lines: [{ merchandiseId: variantId, quantity: 1 }]
-            },
-            lang
-        });
+	async updateQuantity(lineId, quantity) {
+		const cartId = localStorage.getItem(CART_ID_STORAGE_KEY)
+		if (!cartId) return
+		if (quantity <= 0) { await this.removeItem(lineId); return }
 
-        if (data?.cartLinesAdd?.cart) {
-            await fetchCart();
-            isOpen = true;
-        }
-    },
+		await shopifyFetch({
+			query: CART_LINES_UPDATE_MUTATION,
+			variables: { cartId, lines: [{ id: lineId, quantity }] },
+			lang: getLocale(),
+			country: country(),
+		})
+		await fetchCart()
+	},
 
-    async updateQuantity(lineId, quantity) {
-        const cartId = localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (!cartId) return;
+	async removeItem(lineId) {
+		const cartId = localStorage.getItem(CART_ID_STORAGE_KEY)
+		if (!cartId) return
 
-        const lang = getLocale();
-        if (quantity <= 0) {
-            await this.removeItem(lineId);
-            return;
-        }
-
-        await shopifyFetch({
-            query: CART_LINES_UPDATE_MUTATION,
-            variables: {
-                cartId,
-                lines: [{ id: lineId, quantity }]
-            },
-            lang
-        });
-        await fetchCart();
-    },
-
-    async removeItem(lineId) {
-        const cartId = localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (!cartId) return;
-
-        const lang = getLocale();
-        await shopifyFetch({
-            query: CART_LINES_REMOVE_MUTATION,
-            variables: {
-                cartId,
-                lineIds: [lineId]
-            },
-            lang
-        });
-        await fetchCart();
-    }
-};
+		await shopifyFetch({
+			query: CART_LINES_REMOVE_MUTATION,
+			variables: { cartId, lineIds: [lineId] },
+			lang: getLocale(),
+			country: country(),
+		})
+		await fetchCart()
+	},
+}

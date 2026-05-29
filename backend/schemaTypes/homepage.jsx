@@ -1,5 +1,6 @@
 import { HomeIcon, ImageIcon, ProjectsIcon, InfoOutlineIcon, DocumentVideoIcon, StarIcon } from "@sanity/icons";
 import { Preview } from "sanity";
+import seoFields from "./fields/seoFields";
 
 export default {
     name: 'homepage',
@@ -11,6 +12,7 @@ export default {
         { name: 'about', title: 'About', icon: InfoOutlineIcon },
         { name: 'sets', title: 'Sets', icon: ProjectsIcon },
         { name: 'beads', title: 'Beads', icon: ImageIcon },
+		{ name: 'seo', title: 'Seo' },
     ],
     fieldsets: [
         { name: 'hero', title: 'Hero' },
@@ -230,5 +232,6 @@ export default {
             ],
 			validation: Rule => Rule.max(2).error('Max 2 images allowed'),
         },
+		...seoFields('seo'),
     ],
 }

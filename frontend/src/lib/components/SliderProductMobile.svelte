@@ -33,8 +33,8 @@
             speed: 600,
             on: {
                 init(s) {
-                    if (dev) console.log('SwiperHalf initialized');
-                },
+					if (dev) console.log('SwiperHalf initialized');
+				},
             },
         };
         Object.assign(swiperEl, swiperParams);
