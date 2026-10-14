@@ -1,7 +1,7 @@
 import { getShop } from '$lib/utils/sanity';
 import { shopifyFetch, FETCH_PRODUCTS_PAGE, GET_ALL_PRODUCTS } from '$lib/utils/shopify';
 import { getLocale } from '$lib/paraglide/runtime';
-import { error } from '@sveltejs/kit';
+import { error, isHttpError } from '@sveltejs/kit';
 import { m } from '$lib/paraglide/messages.js';
 
 export async function load({ getClientAddress, params, cookies }) {
@@ -62,6 +62,7 @@ export async function load({ getClientAddress, params, cookies }) {
             }
         };
     } catch (err) {
+        if (isHttpError(err)) throw err;
         console.error('Data Sync Error:', err);
         throw error(500, 'Failed to coordinate CMS and Commerce data');
     }

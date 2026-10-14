@@ -1,7 +1,7 @@
 import { shopifyFetch, GET_PRODUCT_BY_HANDLE, GET_RELATED_PRODUCTS, GET_BUNDLES } from '$lib/utils/shopify';
 import { getInfoEmail, getShop } from '$lib/utils/sanity';
 import { getLocale } from '$lib/paraglide/runtime';
-import { error } from '@sveltejs/kit';
+import { error, isHttpError } from '@sveltejs/kit';
 
 export async function load({ params, getClientAddress, cookies }) {
     const { handle } = params;
@@ -94,6 +94,7 @@ export async function load({ params, getClientAddress, cookies }) {
             }
         };
     } catch (err) {
+        if (isHttpError(err)) throw err;
         throw error(500, 'Failed to load product data');
     }
 }

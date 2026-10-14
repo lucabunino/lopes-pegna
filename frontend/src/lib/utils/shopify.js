@@ -1,4 +1,10 @@
 import { PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN, PUBLIC_SHOPIFY_API_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
+import { mockShopify } from '$lib/mock/shopifyMock.js';
+
+// PUBLIC_SHOPIFY_MOCK: "true" = always mock products, "fallback" = mock only when Shopify fails,
+// unset/anything else = real Shopify only
+const MOCK_MODE = env.PUBLIC_SHOPIFY_MOCK;
 
 /**
  * @param {string} query - GraphQL query
@@ -6,6 +12,14 @@ import { PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN, PUBLIC_SHOPIFY_API_URL } from '
  * @param {string} buyerIP - The IP address of the client (from getClientAddress())
  */
 export async function shopifyFetch({ query, variables, lang = 'it', country = 'IT', buyerIP = '' }) {
+    if (MOCK_MODE === 'true') return mockShopify(query, { ...variables, country });
+
+    const data = await shopifyRequest({ query, variables, lang, country, buyerIP });
+    if (data === null && MOCK_MODE === 'fallback') return mockShopify(query, { ...variables, country });
+    return data;
+}
+
+async function shopifyRequest({ query, variables, lang, country, buyerIP }) {
     try {
         const headers = {
             'Content-Type': 'application/json',

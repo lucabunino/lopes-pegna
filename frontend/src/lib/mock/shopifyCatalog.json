@@ -1,0 +1,170 @@
+{
+	"shop": "lopes-pegna-2.myshopify.com",
+	"collections": [
+		{
+			"handle": "anelli",
+			"title": "Anelli"
+		},
+		{
+			"handle": "collane",
+			"title": "Collane"
+		},
+		{
+			"handle": "set",
+			"title": "Set"
+		},
+		{
+			"handle": "orecchini",
+			"title": "Orecchini"
+		}
+	],
+	"products": [
+		{
+			"createdAt": "2026-05-26T16:00:13Z",
+			"descriptionHtml": "<p>Anello di prova</p>",
+			"handle": "a01",
+			"id": "gid://shopify/Product/15849001615694",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_61_0739.webp?v=1779811216",
+			"productType": "Anello",
+			"title": "A01",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518672206",
+					"image": null,
+					"price": 200,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-26T16:00:14Z",
+			"descriptionHtml": "<p>Collana annodata a mano, con occhio di tigre, malachite, pirite avventurina e perle veneziane da collezione, corallo rosso e perle di fiume. Pezzo unico.</p>",
+			"handle": "c83",
+			"id": "gid://shopify/Product/15849001681230",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_83_0701.webp?v=1779811217",
+			"productType": "Collana",
+			"title": "C83",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518737742",
+					"image": null,
+					"price": 580,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-26T16:00:16Z",
+			"descriptionHtml": "<p>Collana annodata a mano con ametista di diverse forme e misure, quarzo citrino, onice opaca e perle coltivate. Pezzo unico.</p>",
+			"handle": "c79",
+			"id": "gid://shopify/Product/15849001746766",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_79_0691.webp?v=1779811219",
+			"productType": "Collana",
+			"title": "C79",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518803278",
+					"image": null,
+					"price": 610,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-26T16:00:18Z",
+			"descriptionHtml": "<p>Lunga collana annodata a mano con 2 perle veneziane fine'800 fancy/piumate, corallo rosso \"peanuts\" primi del '900, elementi in Whitby Jet epoca vittoriana, perle di fiume, elementi in vetro pressato “Egyptian revival” 1920/1925, scarabeo arancione 1920, perla veneziana avventurina 1930. Pezzo unico.</p>",
+			"handle": "c78",
+			"id": "gid://shopify/Product/15849001779534",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_78_0681.webp?v=1779811221",
+			"productType": "Collana",
+			"title": "C78",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518868814",
+					"image": null,
+					"price": 680,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-26T16:00:20Z",
+			"descriptionHtml": "<p>Murrina millefiori, pattern raro, al centro del collier annodato a mano con tipologie differenti per misura e tipologia di pietre dure, corallo rosso \"peanuts\" dei primi del '900, perle di fiume. Pezzo unico.</p>",
+			"handle": "c60b",
+			"id": "gid://shopify/Product/15849001845070",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_60bis_0744.webp?v=1779811224",
+			"productType": "Collana",
+			"title": "C60B",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518901582",
+					"image": null,
+					"price": 300,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-26T16:00:22Z",
+			"descriptionHtml": "<p>Murrina millefiori, pattern raro, annodata a mano con ossidiana sfaccettata, agata rossa, ambra e perle di fiume. Pezzo Unico.</p>",
+			"handle": "c61",
+			"id": "gid://shopify/Product/15849001910606",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/C_61_0739_de1764a0-3326-4234-a61d-54ed27c6a2d1.webp?v=1779811226",
+			"productType": "Collana",
+			"title": "C61",
+			"variants": [
+				{
+					"available": true,
+					"compareAtPrice": 0,
+					"id": "gid://shopify/ProductVariant/59749518967118",
+					"image": null,
+					"price": 300,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		},
+		{
+			"createdAt": "2026-05-27T05:59:12-04:00",
+			"descriptionHtml": "<p>Descrizione di prova</p>",
+			"handle": "s01",
+			"id": "gid://shopify/Product/15849656058190",
+			"image": "https://cdn.shopify.com/s/files/1/1040/2417/9022/files/set-placeholder.png?v=1779876001",
+			"productType": "Set",
+			"title": "S01",
+			"variants": [
+				{
+					"available": false,
+					"compareAtPrice": 600,
+					"id": "gid://shopify/ProductVariant/59752668299598",
+					"image": null,
+					"price": 550,
+					"sku": null,
+					"title": "Default Title"
+				}
+			],
+			"vendor": "Lopes Pegna"
+		}
+	]
+}
